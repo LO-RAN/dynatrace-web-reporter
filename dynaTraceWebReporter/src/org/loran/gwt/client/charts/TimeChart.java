@@ -23,7 +23,7 @@ public class TimeChart extends Chart {
 	public TimeChart() {
 
 		setZoomType(Chart.ZoomType.X);
-		setSpacingRight(20);
+		//setSpacingRight(20);
 		setTitle(" ");
 
 		setLinePlotOptions(new LinePlotOptions()

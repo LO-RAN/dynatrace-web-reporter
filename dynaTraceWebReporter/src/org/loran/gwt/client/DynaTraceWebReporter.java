@@ -8,6 +8,8 @@ import org.loran.gwt.client.datasources.DashboardsDataSource;
 import org.loran.gwt.client.datasources.MeasuresDataSource;
 import org.loran.gwt.client.datasources.ProfilesDataSource;
 import org.loran.gwt.client.datasources.VersionDataSource;
+import org.loran.gwt.client.forms.ChartForm;
+import org.loran.gwt.client.forms.ServerSettingsForm;
 import org.loran.gwt.client.portal.MyPortal;
 import org.loran.gwt.client.portal.MyPortlet;
 
@@ -49,22 +51,15 @@ import com.smartgwt.client.widgets.tree.events.NodeClickHandler;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class DynaTraceWebReporter implements EntryPoint {
-	SelectItem protocol;
-	TextItem dtHost;
-	IntegerItem dtPort;
-	TextItem user;
-	PasswordItem password;
 	ListGrid dashboardsGrid;
 	ListGrid measuresGrid;
 	ListGrid profilesGrid;
 	// TimeChart chart;
-	DynamicForm df;
+	ServerSettingsForm df;
 	DynamicForm vdf;
-	DynamicForm chartForm;
+	ChartForm chartForm;
 	MyPortal portal;
 
-	SelectItem chartType;
-	ColorPickerItem chartColor;
 
 	IButton addToChartButton;
 	// IButton clearChartButton;
@@ -102,96 +97,32 @@ public class DynaTraceWebReporter implements EntryPoint {
 				}
 			});
 		}
-		
-		
 
-		protocol = new SelectItem();
-		protocol.setTitle("Protocol");
-		protocol.setTooltip("select plain or encrypted communication scheme");
-		protocol.setValueMap("http", "https"); //$NON-NLS-1$ //$NON-NLS-2$
-		protocol.setDefaultToFirstOption(true);
-		protocol.setRequired(true);
+		df = new ServerSettingsForm();
+		df.restoreSettings();
 
-		dtHost = new TextItem();
-		dtHost.setTitle("dynaTrace Server Host");
-		dtHost.setTooltip("IP address or DNS name of the dynaTrace Server to connect to");
-		dtHost.setRequired(true);
-
-		dtPort = new IntegerItem();
-		dtPort.setKeyPressFilter("[0-9]"); //$NON-NLS-1$
-		dtPort.setTitle("dynaTrace Server Port");
-		dtPort.setTextAlign(Alignment.RIGHT);
-		dtPort.setTooltip("port of the dynaTrace Server to connect to");
-		dtPort.setRequired(true);
-
-		user = new TextItem();
-		user.setTitle("User");
-		user.setRequired(true);
-		user.setTooltip("User Id, as defined in dynaTrace settings");
-
-		password = new PasswordItem();
-		password.setTitle("Password");
-		password.setTooltip("Password for that user, as managed by the dynaTrace server");
-		password.setRequired(true);
-
-		restoreSettings();
-
-		df = new DynamicForm();
-		df.setWidth100();
-		df.setTitleWidth("*"); //$NON-NLS-1$
-		df.setFields(new FormItem[] { protocol, dtHost, dtPort, user, password });
 
 		vdf = new DynamicForm();
 		vdf.setWidth(300);
 		vdf.setTitleWidth("*"); //$NON-NLS-1$
 
-		chartType = new SelectItem();
-		chartType.setTitle("Chart Type");
-		chartType.setTooltip("select visualisation kind");
 
-		LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>();
-		valueMap.put("line", "Lines"); //$NON-NLS-1$ 
-		valueMap.put("spline", "Spline"); //$NON-NLS-1$ 
-		valueMap.put("area", "Area"); //$NON-NLS-1$ 
-		valueMap.put("column", "Columns"); //$NON-NLS-1$ 
+		chartForm = new ChartForm();
 
-		chartType.setValueMap(valueMap);
-
-		chartType.setImageURLPrefix("/images/icons/16/"); //$NON-NLS-1$
-		chartType.setImageURLSuffix(".png"); //$NON-NLS-1$
-
-		LinkedHashMap<String, String> iconMap = new LinkedHashMap<String, String>();
-		iconMap.put("line", "line_chart"); //$NON-NLS-1$ //$NON-NLS-2$
-		iconMap.put("spline", "spline_chart"); //$NON-NLS-1$ //$NON-NLS-2$
-		iconMap.put("area", "area_chart"); //$NON-NLS-1$ //$NON-NLS-2$
-		iconMap.put("column", "column_chart"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		chartType.setValueIcons(iconMap);
-
-		chartType.setDefaultToFirstOption(true);
-
-		chartColor = new ColorPickerItem();
-		chartColor.setTitle("Chart Color");
-
-		chartForm = new DynamicForm();
-		chartForm.setWidth(250);
-		chartForm.setTitleWidth("*"); //$NON-NLS-1$
-		chartForm.setFields(new FormItem[] { chartType, chartColor });
 
 		dashboardsGrid = new ListGrid();
 		dashboardsGrid.setID("dashboardsGrid"); //$NON-NLS-1$
-		dashboardsGrid.setHeight(150);
+		dashboardsGrid.setHeight100();
 		dashboardsGrid.setWidth(340);
 		dashboardsGrid.setTitle("Dashboards");
 
 		measuresGrid = new ListGrid();
 		measuresGrid.setID("measuresGrid"); //$NON-NLS-1$
-		measuresGrid.setHeight(150);
+		measuresGrid.setHeight100();
 		measuresGrid.setWidth(340);
 		measuresGrid.setTitle("Measures");
 
 		profilesGrid = new ListGrid() {
-			@Override
 			protected ListGrid getExpansionComponent(final ListGridRecord record) {
 
 				ListGrid configurationsGrid = new ListGrid();
@@ -226,22 +157,21 @@ public class DynaTraceWebReporter implements EntryPoint {
 				portlet.setTitle(measuresGrid.getSelectedRecord()
 						.getAttributeAsString("measure")); //$NON-NLS-1$
 
-//				records = measuresGrid.getSelectedRecord().getAttributeAsRecordArray("measurements");
-
 				portlet.addSeries(
 						measuresGrid.getSelectedRecord().getAttributeAsRecordArray("measurements"),
 						measuresGrid.getSelectedRecord().getAttributeAsString(
 								"measure"), //$NON-NLS-1$
 						measuresGrid.getSelectedRecord().getAttributeAsString(
 								"unit"), //$NON-NLS-1$
-						chartColor.getValueAsString(),
+						chartForm.getColor(),
 						measuresGrid.getSelectedRecord().getAttributeAsString(
-								"aggregation"), chartType.getValueAsString());
+								"aggregation"), chartForm.getType());
 
 				portal.addPortlet(portlet);
 
 			}
 		});
+		
 		/*
 		 * clearChartButton = new IButton("Clear Chart");
 		 * clearChartButton.setWidth(150); clearChartButton.addClickHandler(new
@@ -266,7 +196,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		measuresGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
 
-				chartColor.setValue(event.getRecord().getAttributeAsString("color")); //$NON-NLS-1$
+				chartForm.setColor(event.getRecord().getAttributeAsString("color")); //$NON-NLS-1$
 				
 				addToChartButton.setDisabled(false);
 				
@@ -279,12 +209,15 @@ public class DynaTraceWebReporter implements EntryPoint {
 		connectButton.setWidth(150);
 		connectButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				saveSettings();
+				df.saveSettings();
 
-				serverConfig = new ServerConfig(user.getValueAsString(),
-						password.getValueAsString(), protocol
-								.getValueAsString(), dtHost.getValueAsString(),
-						dtPort.getValueAsString());
+				serverConfig = new ServerConfig(
+						df.getUser()
+						,df.getPassword()
+						, df.getProtocol()
+						, df.getHost()
+						,df.getPort()
+						);
 
 				// http://localhost:8020/rest/management/version
 
@@ -361,6 +294,9 @@ public class DynaTraceWebReporter implements EntryPoint {
 		// chartlayout.addMember(clearChartButton);
 
 		gridslayout.addMember(chartlayout);
+		
+		gridslayout.setShowResizeBar(true);
+		gridslayout.setHeight(160);
 
 		//main.addMember(gridslayout);
 
@@ -372,49 +308,5 @@ public class DynaTraceWebReporter implements EntryPoint {
 		main.draw();
 	}
 
-	private void clearSettings() {
-		Offline.remove("dtProtocol");
-		Offline.remove("dtHost"); //$NON-NLS-1$
-		Offline.remove("dtPort"); //$NON-NLS-1$
-		Offline.remove("dtUser"); //$NON-NLS-1$
-		Offline.remove("dtPwd"); //$NON-NLS-1$
-	}
-
-	private void saveSettings() {
-		Offline.put("dtProtocol", protocol.getValueAsString());
-		Offline.put("dtHost", dtHost.getValueAsString()); //$NON-NLS-1$
-		Offline.put("dtPort", dtPort.getValueAsString()); //$NON-NLS-1$
-		Offline.put("dtUser", user.getValueAsString()); //$NON-NLS-1$
-		Offline.put("dtPwd", password.getValueAsString()); //$NON-NLS-1$
-	}
-
-	private void restoreSettings() {
-
-		if (Offline.get("dtProtocol") != null) {
-			protocol.setValue(Offline.get("dtProtocol"));
-			// } else {
-			// protocol.setValue(protocol.getDefaultValue());
-		}
-
-		if (Offline.get("dtHost") != null) { //$NON-NLS-1$
-			dtHost.setValue(Offline.get("dtHost")); //$NON-NLS-1$
-		} else {
-			dtHost.setValue("localhost"); //$NON-NLS-1$
-		}
-		if (Offline.get("dtPort") != null) { //$NON-NLS-1$
-			dtPort.setValue(Offline.get("dtPort")); //$NON-NLS-1$
-		} else {
-			dtPort.setValue(8020);
-		}
-		if (Offline.get("dtUser") != null) { //$NON-NLS-1$
-			user.setValue(Offline.get("dtUser")); //$NON-NLS-1$
-		} else {
-			user.setValue("admin"); //$NON-NLS-1$
-		}
-		if (Offline.get("dtPwd") != null) { //$NON-NLS-1$
-			password.setValue(Offline.get("dtPwd")); //$NON-NLS-1$
-		} else {
-			password.setValue("admin"); //$NON-NLS-1$
-		}
-	}
+	
 }
