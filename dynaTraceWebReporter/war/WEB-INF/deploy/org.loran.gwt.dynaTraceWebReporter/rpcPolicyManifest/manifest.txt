@@ -1,0 +1,2 @@
+# Module org.loran.gwt.dynaTraceWebReporter
+# RPC service class, partial path of RPC policy file

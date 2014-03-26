@@ -1,0 +1,62 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="884" measuredH="630" mockupW="835" mockupH="614">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::TitleWindow" x="49" y="16" w="835" h="614" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>dynaTrace%20Web%20Reporter</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::MenuBar" x="49" y="43" w="835" h="29" measuredW="189" measuredH="29" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>File%2C%20Edit%2C%20View%2C%20Help</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Button" x="58" y="76" w="-1" h="-1" measuredW="39" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3C%3C</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Button" x="97" y="76" w="-1" h="-1" measuredW="31" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3C</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Button" x="128" y="76" w="-1" h="-1" measuredW="32" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3E</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Button" x="160" y="76" w="-1" h="-1" measuredW="44" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3E%3E%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::FieldSet" x="60" y="104" w="824" h="503" measuredW="200" measuredH="170" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Group%20Name</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::HSplitter" x="189" y="118" w="-1" h="474" measuredW="11" measuredH="100" zOrder="7" locked="false" isInGroup="-1"/>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Accordion" x="69" y="122" w="120" h="470" measuredW="150" measuredH="186" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Item%20One%0AItem%20Two%0A-%20Sub-Item%202.1%0A-%20Sub-Item%202.2%0AItem%20Three%0AItem%20Four</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Tree" x="75" y="155" w="114" h="352" measuredW="300" measuredH="285" zOrder="9" locked="false" isInGroup="-1"/>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::TabBar" x="205" y="120" w="679" h="481" measuredW="205" measuredH="100" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>One%2C%20Two%2C%20Three%2C%20Four</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::TitleWindow" x="210" y="193" w="-1" h="-1" measuredW="450" measuredH="400" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <close>true</close>
+        <dragger>true</dragger>
+        <maximizeRestore>true</maximizeRestore>
+        <minimize>true</minimize>
+        <text>Window%20Name</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::LineChart" x="215" y="219" w="445" h="348" measuredW="187" measuredH="175" zOrder="12" locked="false" isInGroup="-1"/>
+  </controls>
+</mockup>
+
