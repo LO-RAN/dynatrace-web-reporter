@@ -3,7 +3,6 @@ package org.loran.gwt.client.datasources;
 import org.loran.gwt.client.config.ServerConfig;
 
 import com.smartgwt.client.data.DataSource;
-import com.smartgwt.client.data.fields.DataSourceFloatField;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
