@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -21,7 +22,7 @@ public class ProxyServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final String USER_AGENT = "Mozilla/5.0";
+	//private final String USER_AGENT = "Mozilla/5.0";
 
 	String user;
 	String pwd;
@@ -45,7 +46,7 @@ public class ProxyServlet extends HttpServlet {
 				byte[] authEncBytes = Base64
 						.encodeBase64(authString.getBytes());
 				String authStringEnc = new String(authEncBytes);
-				URLConnection connection = url.openConnection();
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				// connection.setRequestMethod("GET");
 				connection.setUseCaches(false);
 
@@ -53,22 +54,21 @@ public class ProxyServlet extends HttpServlet {
 				connection.setRequestProperty("Authorization", "Basic "
 						+ authStringEnc);
 				// act like a browser
-				connection.setRequestProperty("User-Agent", USER_AGENT);
-				connection
-						.setRequestProperty("Accept",
-								"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-				connection.setRequestProperty("Accept-Language",
-						"en-US,en;q=0.5");
+				//connection.setRequestProperty("User-Agent", USER_AGENT);
+				//connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+				//connection.setRequestProperty("Accept-Language","en-US,en;q=0.5");
 
+				
 				InputStream content = (InputStream) connection.getInputStream();
 				BufferedReader in = new BufferedReader(new InputStreamReader(
 						content));
 				String line;
 				while ((line = in.readLine()) != null) {
 					out.println(line);
+					System.out.println(line);
 				}
 
-				System.out.println(out.toString());
+				//System.out.println(out.toString());
 
 			} catch (Exception e) {
 				out.println(e.getLocalizedMessage());

@@ -147,13 +147,11 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 				portlet.addSeries(
 						measuresGrid.getSelectedRecord().getAttributeAsRecordArray("measurements"),
-						measuresGrid.getSelectedRecord().getAttributeAsString(
-								"measure"), //$NON-NLS-1$
-						measuresGrid.getSelectedRecord().getAttributeAsString(
-								"unit"), //$NON-NLS-1$
+						measuresGrid.getSelectedRecord().getAttributeAsString("measure"), //$NON-NLS-1$
+						measuresGrid.getSelectedRecord().getAttributeAsString("unit"), //$NON-NLS-1$
 						chartForm.getColor(),
-						measuresGrid.getSelectedRecord().getAttributeAsString(
-								"aggregation"), chartForm.getType());
+						measuresGrid.getSelectedRecord().getAttributeAsString("aggregation"), 
+						chartForm.getType());
 
 				portal.addPortlet(portlet);
 
@@ -200,10 +198,10 @@ public class DynaTraceWebReporter implements EntryPoint {
 				df.saveSettings();
 
 				serverConfig = new ServerConfig(
-						df.getUser()
+						 df.getUser()
 						,df.getPassword()
-						, df.getProtocol()
-						, df.getHost()
+						,df.getProtocol()
+						,df.getHost()
 						,df.getPort()
 						);
 
