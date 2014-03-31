@@ -29,7 +29,7 @@ public class ServerConfig {
 		return getProxiedURLPrefix() + "/rest/management/dashboards";
 	}
 	
-	public String getChartsURL(String dashBoardURL) {
+	public String getDashletsURL(String dashBoardURL) {
 		return getProxiedURLPrefix() 
 				+ com.google.gwt.http.client.URL.encodeQueryString(dashBoardURL)
 				+ "?type=xml";

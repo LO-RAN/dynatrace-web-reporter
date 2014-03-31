@@ -65,7 +65,7 @@ public class ProxyServlet extends HttpServlet {
 				String line;
 				while ((line = in.readLine()) != null) {
 					out.println(line);
-					System.out.println(line);
+					//System.out.println(line);
 				}
 
 				//System.out.println(out.toString());

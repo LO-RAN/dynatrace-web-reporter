@@ -11,11 +11,8 @@ import com.smartgwt.client.types.DSDataFormat;
 
 public class MeasuresDataSource extends DataSource {
 
-	public MeasuresDataSource(ServerConfig serverConfig, String strURL) {
-		setDataURL(serverConfig.getChartsURL(strURL));
-		// setClientOnly(true);
+	public MeasuresDataSource() {
 		setDataFormat(DSDataFormat.XML);
-		setRecordXPath("//chartdashlet/measures/measure");
 
 		DataSourceTextField measure = new DataSourceTextField("measure",
 				"Measure");

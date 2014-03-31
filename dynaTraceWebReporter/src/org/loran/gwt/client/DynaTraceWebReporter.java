@@ -3,6 +3,7 @@ package org.loran.gwt.client;
 import org.loran.gwt.client.config.ServerConfig;
 import org.loran.gwt.client.datasources.ConfigurationsDataSource;
 import org.loran.gwt.client.datasources.DashboardsDataSource;
+import org.loran.gwt.client.datasources.DashletsDataSource;
 import org.loran.gwt.client.datasources.MeasuresDataSource;
 import org.loran.gwt.client.datasources.ProfilesDataSource;
 import org.loran.gwt.client.datasources.VersionDataSource;
@@ -15,6 +16,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.core.KeyIdentifier;
 import com.smartgwt.client.data.DataSource;
+import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.ResultSet;
 import com.smartgwt.client.types.ExpansionMode;
 import com.smartgwt.client.types.VisibilityMode;
@@ -40,7 +42,7 @@ import com.smartgwt.client.widgets.layout.VLayout;
  */
 public class DynaTraceWebReporter implements EntryPoint {
 	ListGrid dashboardsGrid;
-	ListGrid measuresGrid;
+	ListGrid dashletsGrid;
 	ListGrid profilesGrid;
 	// TimeChart chart;
 	ServerSettingsForm df;
@@ -52,6 +54,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 	IButton addToChartButton;
 	// IButton clearChartButton;
 
+	DataSource dashletsDS;
 	DataSource measuresDS;
 	DataSource measurementsDS;
 	ResultSet rs;
@@ -104,11 +107,11 @@ public class DynaTraceWebReporter implements EntryPoint {
 		dashboardsGrid.setWidth(340);
 		dashboardsGrid.setTitle("Dashboards");
 
-		measuresGrid = new ListGrid();
-		measuresGrid.setID("measuresGrid"); //$NON-NLS-1$
-		measuresGrid.setHeight100();
-		measuresGrid.setWidth(340);
-		measuresGrid.setTitle("Measures");
+		dashletsGrid = new ListGrid();
+		dashletsGrid.setID("dashletsGrid"); //$NON-NLS-1$
+		dashletsGrid.setHeight100();
+		dashletsGrid.setWidth(340);
+		dashletsGrid.setTitle("Dashlets");
 
 		profilesGrid = new ListGrid() {
 			protected ListGrid getExpansionComponent(final ListGridRecord record) {
@@ -142,17 +145,19 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 				MyPortlet portlet = new MyPortlet();
 				
-				portlet.setTitle(measuresGrid.getSelectedRecord()
-						.getAttributeAsString("measure")); //$NON-NLS-1$
+				portlet.setTitle(dashletsGrid.getSelectedRecord()
+						.getAttributeAsString("name")); //$NON-NLS-1$
 
+				Record[] series=dashletsGrid.getSelectedRecord().getAttributeAsRecordArray("measures");  //$NON-NLS-1$
+				for(Record serie:series){
 				portlet.addSeries(
-						measuresGrid.getSelectedRecord().getAttributeAsRecordArray("measurements"),
-						measuresGrid.getSelectedRecord().getAttributeAsString("measure"), //$NON-NLS-1$
-						measuresGrid.getSelectedRecord().getAttributeAsString("unit"), //$NON-NLS-1$
-						chartForm.getColor(),
-						measuresGrid.getSelectedRecord().getAttributeAsString("aggregation"), 
+						serie.getAttributeAsRecordArray("measurements"),  //$NON-NLS-1$
+						serie.getAttributeAsString("measure"), //$NON-NLS-1$
+						serie.getAttributeAsString("unit"), //$NON-NLS-1$
+						serie.getAttributeAsString("color"),  //$NON-NLS-1$
+						serie.getAttributeAsString("aggregation"),  //$NON-NLS-1$
 						chartForm.getType());
-
+				}
 				portal.addPortlet(portlet);
 
 			}
@@ -168,28 +173,17 @@ public class DynaTraceWebReporter implements EntryPoint {
 		dashboardsGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
 
-				measuresDS = new MeasuresDataSource(serverConfig,
+				dashletsDS = new DashletsDataSource(serverConfig,
 						event.getRecord().getAttributeAsString("hrefrel")); //$NON-NLS-1$
 
-				measuresGrid.setDataSource(measuresDS);
+				dashletsGrid.setDataSource(dashletsDS);
 
-				measuresGrid.fetchData();
+				dashletsGrid.fetchData();
 
-				addToChartButton.setDisabled(true);
-			}
-		});
-
-		measuresGrid.addRecordClickHandler(new RecordClickHandler() {
-			public void onRecordClick(RecordClickEvent event) {
-
-				chartForm.setColor(event.getRecord().getAttributeAsString("color")); //$NON-NLS-1$
-				
 				addToChartButton.setDisabled(false);
-				
-	
 			}
-
 		});
+
 
 		IButton connectButton = new IButton("Connect");
 		connectButton.setWidth(150);
@@ -238,7 +232,6 @@ public class DynaTraceWebReporter implements EntryPoint {
 							}
 						});
 
-				measuresGrid.setData(new ListGridRecord[] {});
 				addToChartButton.setDisabled(true);
 				// chart.clear();
 
@@ -272,7 +265,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 		HLayout gridslayout = new HLayout();
 		gridslayout.addMember(dashboardsGrid);
-		gridslayout.addMember(measuresGrid);
+		gridslayout.addMember(dashletsGrid);
 
 		VLayout chartlayout = new VLayout();
 		chartlayout.addMember(chartForm);
