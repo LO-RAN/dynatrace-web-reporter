@@ -19,12 +19,14 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.smartgwt.client.data.Record;
 
 public class TimeChart extends Chart {
-
+	String title="";
+	
 	public TimeChart() {
 
+		
 		setZoomType(Chart.ZoomType.X);
 		//setSpacingRight(20);
-		setTitle(" ");
+		setTitle(title);
 
 		setLinePlotOptions(new LinePlotOptions()
 				.setLineWidth(1)
@@ -52,11 +54,15 @@ public class TimeChart extends Chart {
 	public void clear(){		
 		removeAllSeries();
 	}
+
+	public String getTitle(){
+		return title;
+	}
 	
 	public void setTitle(String title){
+		this.title=title;
 		setTitle( new ChartTitle().setText(title)
-				, new ChartSubtitle().setText("(Click and drag in the plot area to zoom in)"));
-		
+				, new ChartSubtitle().setText("(Click and drag in the plot area to zoom in)"));	
 	}
 
 	public void addSeries(Record[] records, String label, String unit, String color, String aggregation, String chartType) {

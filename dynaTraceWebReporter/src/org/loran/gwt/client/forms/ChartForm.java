@@ -2,16 +2,22 @@ package org.loran.gwt.client.forms;
 
 import java.util.LinkedHashMap;
 
+import com.smartgwt.client.data.Record;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ColorPickerItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
+import com.smartgwt.client.widgets.form.fields.TextItem;
 
 public class ChartForm extends DynamicForm {
 	SelectItem chartType;
 	ColorPickerItem chartColor;
+	TextItem chartTitle;
 
 	public ChartForm() {
+		
+		chartTitle = new TextItem();
+		chartTitle.setTitle("Title");
 		chartType = new SelectItem();
 		chartType.setTitle("Chart Type");
 		chartType.setTooltip("select visualisation kind");
@@ -41,7 +47,16 @@ public class ChartForm extends DynamicForm {
 
 		setWidth(250);
 		setTitleWidth("*"); //$NON-NLS-1$
-		setFields(new FormItem[] { chartType, chartColor });
+		setFields(new FormItem[] { chartTitle, chartType, chartColor });
+	}
+
+
+	public String getTitle() {
+		return chartTitle.getValueAsString();
+	}
+
+	public void setTitle(String title) {
+		chartTitle.setValue(title);
 	}
 
 	public String getType(){

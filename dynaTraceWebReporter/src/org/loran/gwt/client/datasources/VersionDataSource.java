@@ -13,7 +13,6 @@ public class VersionDataSource extends DataSource {
  
 	public VersionDataSource(ServerConfig serverConfig) {
 		setDataURL(serverConfig.getVersionURL());
-		setClientOnly(true);
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//result");
 		
@@ -26,7 +25,7 @@ public class VersionDataSource extends DataSource {
 
 			@Override
 			public void onHandleError(ErrorEvent event) {
-				SC.say("Error getting version");
+				SC.warn("Error getting version");
 			}});
 	}
 }

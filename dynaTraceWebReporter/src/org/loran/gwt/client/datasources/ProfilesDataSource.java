@@ -30,7 +30,7 @@ public class ProfilesDataSource extends DataSource {
 
 			@Override
 			public void onHandleError(ErrorEvent event) {
-				SC.say("Error getting profiles list");				
+				SC.warn("Error getting profiles list");				
 			}});
 	}
 }

@@ -1,7 +1,5 @@
 package org.loran.gwt.client.config;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 public class ServerConfig {
 

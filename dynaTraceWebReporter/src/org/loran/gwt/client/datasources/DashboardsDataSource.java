@@ -14,7 +14,6 @@ public class DashboardsDataSource extends DataSource {
  
 	public DashboardsDataSource(ServerConfig serverConfig) {
 		setDataURL(serverConfig.getDashboardsURL());
-		setClientOnly(true);
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//dashboard");
 				
@@ -30,7 +29,7 @@ public class DashboardsDataSource extends DataSource {
 
 			@Override
 			public void onHandleError(ErrorEvent event) {
-				SC.say("Error getting dashboards list");				
+				SC.warn("Error getting dashboards list");				
 			}});
 	}
 }

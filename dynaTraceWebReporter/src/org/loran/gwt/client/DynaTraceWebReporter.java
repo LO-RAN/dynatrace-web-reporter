@@ -4,20 +4,23 @@ import org.loran.gwt.client.config.ServerConfig;
 import org.loran.gwt.client.datasources.ConfigurationsDataSource;
 import org.loran.gwt.client.datasources.DashboardsDataSource;
 import org.loran.gwt.client.datasources.DashletsDataSource;
-import org.loran.gwt.client.datasources.MeasuresDataSource;
 import org.loran.gwt.client.datasources.ProfilesDataSource;
 import org.loran.gwt.client.datasources.VersionDataSource;
 import org.loran.gwt.client.forms.ChartForm;
 import org.loran.gwt.client.forms.ServerSettingsForm;
+import org.loran.gwt.client.portal.ChartPortlet;
 import org.loran.gwt.client.portal.MyPortal;
-import org.loran.gwt.client.portal.MyPortlet;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+
 import com.smartgwt.client.core.KeyIdentifier;
+import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
-import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.ResultSet;
+import com.smartgwt.client.rpc.HandleErrorCallback;
+import com.smartgwt.client.rpc.RPCManager;
 import com.smartgwt.client.types.ExpansionMode;
 import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.util.Page;
@@ -68,6 +71,17 @@ public class DynaTraceWebReporter implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 
+		RPCManager.setHandleErrorCallback(new HandleErrorCallback() {
+
+			@Override
+			public void handleError(DSResponse response, DSRequest request) {
+
+		        SC.warn("Error : "+response.getStatus()+" "+response.getHttpResponseCode()+" "+response.getHttpResponseText());
+				
+			}
+		    });
+
+		
 		// clearSettings();
 
 		HLayout main = new HLayout();
@@ -143,21 +157,8 @@ public class DynaTraceWebReporter implements EntryPoint {
 		addToChartButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 
-				MyPortlet portlet = new MyPortlet();
+				ChartPortlet portlet = new ChartPortlet(dashletsGrid.getSelectedRecord());
 				
-				portlet.setTitle(dashletsGrid.getSelectedRecord()
-						.getAttributeAsString("name")); //$NON-NLS-1$
-
-				Record[] series=dashletsGrid.getSelectedRecord().getAttributeAsRecordArray("measures");  //$NON-NLS-1$
-				for(Record serie:series){
-				portlet.addSeries(
-						serie.getAttributeAsRecordArray("measurements"),  //$NON-NLS-1$
-						serie.getAttributeAsString("measure"), //$NON-NLS-1$
-						serie.getAttributeAsString("unit"), //$NON-NLS-1$
-						serie.getAttributeAsString("color"),  //$NON-NLS-1$
-						serie.getAttributeAsString("aggregation"),  //$NON-NLS-1$
-						chartForm.getType());
-				}
 				portal.addPortlet(portlet);
 
 			}
@@ -172,6 +173,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		 */
 		dashboardsGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
+				addToChartButton.setDisabled(true);
 
 				dashletsDS = new DashletsDataSource(serverConfig,
 						event.getRecord().getAttributeAsString("hrefrel")); //$NON-NLS-1$
@@ -180,7 +182,14 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 				dashletsGrid.fetchData();
 
+			}
+		});
+		
+		dashletsGrid.addRecordClickHandler(new RecordClickHandler() {
+			public void onRecordClick(RecordClickEvent event) {
+
 				addToChartButton.setDisabled(false);
+
 			}
 		});
 

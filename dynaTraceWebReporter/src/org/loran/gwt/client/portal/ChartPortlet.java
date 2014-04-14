@@ -2,12 +2,20 @@ package org.loran.gwt.client.portal;
 
 import org.loran.gwt.client.charts.ResizeableChartCanvas;
 import org.loran.gwt.client.charts.TimeChart;
+import org.loran.gwt.client.forms.ChartForm;
+import org.moxieapps.gwt.highcharts.client.Series;
 
 import com.smartgwt.client.data.Record;
+import com.smartgwt.client.data.RecordList;
 import com.smartgwt.client.types.HeaderControls;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.Dialog;
 import com.smartgwt.client.widgets.HeaderControl;
+import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Window;
+import com.smartgwt.client.widgets.events.ButtonClickEvent;
+import com.smartgwt.client.widgets.events.ButtonClickHandler;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.events.CloseClickEvent;
@@ -15,16 +23,35 @@ import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.Portlet;
 
-public class MyPortlet extends Portlet {
+public class ChartPortlet extends Portlet {
 	TimeChart chart;
+	ChartForm form;
+	Record record;
 
-	public MyPortlet() {
+	public ChartPortlet(final Record record) {
 
+		this.record=record;
+		
+		setTitle(record.getAttributeAsString("name"));
+		
+		Record[] series=record.getAttributeAsRecordArray("measures");  //$NON-NLS-1$
 
+		
 		chart = new TimeChart();
-		chart.setTitle("Measurements");
+		chart.setTitle(record.getAttributeAsString("name"));
+
+		for(Record serie:series){
+			addSeries(
+				serie.getAttributeAsRecordArray("measurements"),  //$NON-NLS-1$
+				serie.getAttributeAsString("measure"), //$NON-NLS-1$
+				serie.getAttributeAsString("unit"), //$NON-NLS-1$
+				serie.getAttributeAsString("color"),  //$NON-NLS-1$
+				serie.getAttributeAsString("aggregation"),  //$NON-NLS-1$
+				"line");
+		}
 
 		ResizeableChartCanvas chartCanvas = new ResizeableChartCanvas(chart);
 		addItem(chartCanvas);
@@ -35,32 +62,46 @@ public class MyPortlet extends Portlet {
 					public void onClick(ClickEvent event) {
 						final Window winModal = new Window();
 						winModal.setWidth(360);
-						winModal.setHeight(115);
+						winModal.setHeight(200);
 						winModal.setTitle("Modal Window");
 						winModal.setShowMinimizeButton(false);
 						winModal.setIsModal(true);
 						winModal.setShowModalMask(true);
 						winModal.centerInPage();
+						
 
 						winModal.addCloseClickHandler(new CloseClickHandler() {
 							public void onCloseClick(CloseClickEvent event) {
 								winModal.destroy();
 							}
 						});
-						DynamicForm form = new DynamicForm();
+						
+						
+						form = new ChartForm();
 						form.setHeight100();
 						form.setWidth100();
 						form.setPadding(5);
 						form.setLayoutAlign(VerticalAlignment.BOTTOM);
-						TextItem textItem = new TextItem();
-						textItem.setTitle("Text");
-						DateItem dateItem = new DateItem();
-						dateItem.setTitle("Date");
-						DateItem dateItem2 = new DateItem();
-						dateItem2.setTitle("Date");
-						dateItem2.setUseTextField(true);
-						form.setFields(textItem, dateItem, dateItem2);
+						
+						form.setTitle(chart.getTitle());
+						
+						
+						for(Series series:chart.getSeries()){
+							//series.get
+						}
+						
+						IButton okButton = new IButton("Ok");
+						okButton.setWidth(100);
+						okButton.addClickHandler(new ClickHandler() {
+							public void onClick(ClickEvent event) {
+								chart.setTitle(form.getTitle());
+								
+								winModal.destroy();
+							};
+						});
+
 						winModal.addItem(form);
+						winModal.addItem(okButton);
 						winModal.show();
 					}
 				});
@@ -82,4 +123,8 @@ public class MyPortlet extends Portlet {
 		chart.addSeries(records, label, unit, color, aggregation, chartType);
 
 	}
+	
+	
+	
+	
 }

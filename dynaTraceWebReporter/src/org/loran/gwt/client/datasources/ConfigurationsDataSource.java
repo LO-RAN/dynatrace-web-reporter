@@ -15,7 +15,6 @@ public class ConfigurationsDataSource extends DataSource {
  
 	public ConfigurationsDataSource(ServerConfig serverConfig,String profile) {
 		setDataURL(serverConfig.getConfigurationsURL(profile));
-		setClientOnly(true);
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//configuration");
 				
@@ -30,7 +29,7 @@ public class ConfigurationsDataSource extends DataSource {
 
 			@Override
 			public void onHandleError(ErrorEvent event) {
-				SC.say("Error getting configurations list");				
+				SC.warn("Error getting configurations list");				
 			}});
 	}
 

@@ -15,10 +15,5 @@ public class MyPortal extends PortalLayout{
 		setCanDragResize(true);
 		setShowColumnMenus(false);
 
-	}
-	
-	public void addPortlet(){
-		
-	}
-	
+	}	
 }

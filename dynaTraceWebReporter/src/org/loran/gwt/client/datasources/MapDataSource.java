@@ -11,7 +11,6 @@ public class MapDataSource extends DataSource {
 
 	public MapDataSource(ServerConfig serverConfig, String strURL, String measureName) {
 		setDataURL(serverConfig.getDashletsURL(strURL));
-		setClientOnly(true);
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//worldmapdashlet/worldmap/datapoint");
 

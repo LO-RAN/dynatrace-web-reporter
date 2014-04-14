@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +22,7 @@ public class ProxyServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	//private final String USER_AGENT = "Mozilla/5.0";
+	// private final String USER_AGENT = "Mozilla/5.0";
 
 	String user;
 	String pwd;
@@ -40,44 +40,49 @@ public class ProxyServlet extends HttpServlet {
 
 		try {
 			out = response.getWriter();
-			try {
-				URL url = new URL(strUrl.replaceAll(" ", "%20"));
-				String authString = user + ":" + pwd;
-				byte[] authEncBytes = Base64
-						.encodeBase64(authString.getBytes());
-				String authStringEnc = new String(authEncBytes);
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				// connection.setRequestMethod("GET");
-				connection.setUseCaches(false);
+			URL url;
+			url = new URL(strUrl.replaceAll(" ", "%20"));
+			String authString = user + ":" + pwd;
+			byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
+			String authStringEnc = new String(authEncBytes);
+			HttpURLConnection connection;
+			connection = (HttpURLConnection) url.openConnection();
+			// connection.setRequestMethod("GET");
+			connection.setUseCaches(false);
 
-				connection.setDoOutput(true);
-				connection.setRequestProperty("Authorization", "Basic "
-						+ authStringEnc);
-				// act like a browser
-				//connection.setRequestProperty("User-Agent", USER_AGENT);
-				//connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-				//connection.setRequestProperty("Accept-Language","en-US,en;q=0.5");
+			// connection.setDoOutput(true);
+			connection.setRequestProperty("Authorization", "Basic "
+					+ authStringEnc);
+			// act like a browser
+			// connection.setRequestProperty("User-Agent", USER_AGENT);
+			// connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			// connection.setRequestProperty("Accept-Language","en-US,en;q=0.5");
 
-				
+			connection.connect();
+			if (connection.getResponseCode() == 200) {
 				InputStream content = (InputStream) connection.getInputStream();
 				BufferedReader in = new BufferedReader(new InputStreamReader(
 						content));
 				String line;
 				while ((line = in.readLine()) != null) {
 					out.println(line);
-					//System.out.println(line);
+					// System.out.println(line);
 				}
-
-				//System.out.println(out.toString());
-
-			} catch (Exception e) {
-				out.println(e.getLocalizedMessage());
-				e.printStackTrace();
+			} else {
+				System.out.println("Error status : "
+						+ connection.getResponseCode() + ", Message : "
+						+ connection.getResponseMessage());
+				response.sendError(connection.getResponseCode(),
+						connection.getResponseMessage());
 			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+
+		} catch (Exception e) {
+			try {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
-
 }

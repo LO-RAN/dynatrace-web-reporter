@@ -22,7 +22,7 @@ public class DashletsDataSource extends DataSource {
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//chartdashlet");
 				
-		DataSourceTextField name = new DataSourceTextField("name", "Name");  
+		DataSourceTextField name = new DataSourceTextField("name", "Dashlet");  
 		DataSourceTextField desc = new DataSourceTextField("description", "Description");
 		desc.setDetail(true);
 		DataSourceBooleanField showabsolutevalues = new DataSourceBooleanField("showabsolutevalues", "Absolute"); 
