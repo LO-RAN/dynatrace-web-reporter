@@ -26,14 +26,18 @@ public class TimeChart extends Chart {
 		
 		setZoomType(Chart.ZoomType.X);
 		//setSpacingRight(20);
-		setTitle(title);
+		//setTitle(title);
 
 		setLinePlotOptions(new LinePlotOptions()
 				.setLineWidth(1)
-				.setMarker(
-						new Marker().setEnabled(false).setHoverState(
-								new Marker().setEnabled(true).setRadius(5)))
-				.setShadow(false).setHoverStateLineWidth(1));
+				.setMarker(new Marker().setEnabled(false)
+						               .setHoverState(new Marker().setEnabled(true)
+						            		                       .setRadius(5)
+						            		         )
+						  )
+				.setShadow(false)
+				.setHoverStateLineWidth(1)
+				);
 
 		getXAxis().setType(Axis.Type.DATE_TIME);
 		getXAxis().setEndOnTick(true);

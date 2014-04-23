@@ -157,7 +157,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		addToChartButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 
-				ChartPortlet portlet = new ChartPortlet(dashletsGrid.getSelectedRecord());
+				ChartPortlet portlet = new ChartPortlet(dashletsGrid.getSelectedRecord(), chartForm.getType());
 				
 				portal.addPortlet(portlet);
 
