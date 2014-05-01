@@ -14,6 +14,5 @@ public class MyPortal extends PortalLayout{
 		setCanResizePortlets(true);
 		setCanDragResize(true);
 		setShowColumnMenus(false);
-
 	}	
 }

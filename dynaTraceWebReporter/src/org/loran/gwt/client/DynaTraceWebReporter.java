@@ -13,7 +13,6 @@ import org.loran.gwt.client.portal.MyPortal;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-
 import com.smartgwt.client.core.KeyIdentifier;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
@@ -54,7 +53,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 	MyPortal portal;
 
 
-	IButton addToChartButton;
+	IButton addPortletButton;
 	// IButton clearChartButton;
 
 	DataSource dashletsDS;
@@ -151,16 +150,16 @@ public class DynaTraceWebReporter implements EntryPoint {
 		profilesGrid.setCanExpandRecords(true);
 		profilesGrid.setExpansionMode(ExpansionMode.RELATED);
 
-		addToChartButton = new IButton("Add to Chart");
-		addToChartButton.setWidth(150);
-		addToChartButton.setDisabled(true);
-		addToChartButton.addClickHandler(new ClickHandler() {
+		addPortletButton = new IButton("Add selected dashlets");
+		addPortletButton.setWidth(150);
+		addPortletButton.setDisabled(true);
+		addPortletButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-
-				ChartPortlet portlet = new ChartPortlet(dashletsGrid.getSelectedRecord(), chartForm.getType());
+				for(ListGridRecord record : dashletsGrid.getSelectedRecords()){
+				ChartPortlet portlet = new ChartPortlet(record, chartForm.getType(), chartForm.getIsInverted());
 				
 				portal.addPortlet(portlet);
-
+				}
 			}
 		});
 		
@@ -173,7 +172,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		 */
 		dashboardsGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
-				addToChartButton.setDisabled(true);
+				addPortletButton.setDisabled(true);
 
 				dashletsDS = new DashletsDataSource(serverConfig,
 						event.getRecord().getAttributeAsString("hrefrel")); //$NON-NLS-1$
@@ -188,7 +187,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		dashletsGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
 
-				addToChartButton.setDisabled(false);
+				addPortletButton.setDisabled(false);
 
 			}
 		});
@@ -241,7 +240,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 							}
 						});
 
-				addToChartButton.setDisabled(true);
+				addPortletButton.setDisabled(true);
 				// chart.clear();
 
 			}
@@ -278,7 +277,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 		VLayout chartlayout = new VLayout();
 		chartlayout.addMember(chartForm);
-		chartlayout.addMember(addToChartButton);
+		chartlayout.addMember(addPortletButton);
 		// chartlayout.addMember(clearChartButton);
 
 		gridslayout.addMember(chartlayout);

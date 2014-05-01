@@ -20,11 +20,11 @@ public class ProfilesDataSource extends DataSource {
 		setRecordXPath("//systemprofile");
 				
 		DataSourceTextField id = new DataSourceTextField("id", "System Profile");  
-		DataSourceBooleanField enabled = new DataSourceBooleanField("isrecording", "enabled");  
+		DataSourceBooleanField isrecording = new DataSourceBooleanField("isrecording", "recording");  
 		DataSourceLinkField href = new DataSourceLinkField("href", "HREF");  
 		href.setDetail(true);
 		
-		setFields(id, enabled, href); 
+		setFields(id, isrecording, href); 
 		
 		addHandleErrorHandler(new HandleErrorHandler(){
 

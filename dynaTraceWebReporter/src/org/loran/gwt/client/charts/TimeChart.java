@@ -8,7 +8,6 @@ import org.moxieapps.gwt.highcharts.client.ChartSubtitle;
 import org.moxieapps.gwt.highcharts.client.ChartTitle;
 import org.moxieapps.gwt.highcharts.client.Point;
 import org.moxieapps.gwt.highcharts.client.Series;
-import org.moxieapps.gwt.highcharts.client.Series.Type;
 import org.moxieapps.gwt.highcharts.client.ToolTip;
 import org.moxieapps.gwt.highcharts.client.ToolTipData;
 import org.moxieapps.gwt.highcharts.client.ToolTipFormatter;
@@ -24,6 +23,8 @@ public class TimeChart extends Chart {
 	public TimeChart() {
 
 		
+		
+    		
 		setZoomType(Chart.ZoomType.X);
 		//setSpacingRight(20);
 		//setTitle(title);
@@ -87,29 +88,28 @@ public class TimeChart extends Chart {
 				aggreg="count";
 		}
 			
-			Type type=Type.LINE;
-			
-			if("line".equals(chartType)){
-				type=Type.LINE;
-			}else if ("spline".equals(chartType)){
-				type=Type.SPLINE;
-			}else if ("area".equals(chartType)){
-				type=Type.AREA;
-			}else if ("column".equals(chartType)){
-				type=Type.COLUMN;
-		}
-		
+//			Type type=Type.LINE;
+//			
+//			if("line".equals(chartType)){
+//				type=Type.LINE;
+//			}else if ("spline".equals(chartType)){
+//				type=Type.SPLINE;
+//			}else if ("area".equals(chartType)){
+//				type=Type.AREA;
+//			}else if ("column".equals(chartType)){
+//				type=Type.COLUMN;
+//		}
+//		
 			Series series = createSeries();
 
-			series
-					.setName(label+" ("+aggregation+")")
-					.setType(type)
-					.setPlotOptions(new LinePlotOptions()  
+			series.setName(label+" ("+aggregation+")")
+				  .setOption("type", chartType)
+				  .setPlotOptions(new LinePlotOptions()  
 						.setPointInterval(30 * 1000) /* 30 seconds */
-						.setPointStart(records[0].getAttributeAsLong("timestamp"))
-						.setColor(color)
+						.setPointStart(records[0].getAttributeAsLong("timestamp")
 						)
-					;  
+				  .setColor(color)
+				  );  
 
 			//for (int i = 0; i < rl.getLength(); i++) {
 			for (Record r : records) {

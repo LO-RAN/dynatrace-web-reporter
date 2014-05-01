@@ -4,6 +4,8 @@ import org.loran.gwt.client.charts.ResizeableChartCanvas;
 import org.loran.gwt.client.charts.TimeChart;
 import org.loran.gwt.client.forms.ChartForm;
 import org.moxieapps.gwt.highcharts.client.Series;
+import org.moxieapps.gwt.highcharts.client.Series.Type;
+import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions;
 
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.types.HeaderControls;
@@ -23,13 +25,7 @@ public class ChartPortlet extends Portlet {
 	ChartForm form;
 	Record record;
 
-	public ChartPortlet(ListGridRecord record) {
-		this(record, "line");
-	}
-
-	public ChartPortlet(ListGridRecord record, String type) {
-		// TODO Auto-generated constructor stub
-		this.record = record;
+	public ChartPortlet(ListGridRecord record, String type, Boolean isInverted) {
 
 		setTitle(record.getAttributeAsString("name"));
 
@@ -37,7 +33,8 @@ public class ChartPortlet extends Portlet {
 
 		chart = new TimeChart();
 		chart.setTitle(record.getAttributeAsString("name"));
-
+		chart.setInverted(isInverted);
+		
 		for (Record serie : series) {
 			addSeries(serie.getAttributeAsRecordArray("measurements"), //$NON-NLS-1$
 					serie.getAttributeAsString("measure"), //$NON-NLS-1$
@@ -76,16 +73,25 @@ public class ChartPortlet extends Portlet {
 						form.setLayoutAlign(VerticalAlignment.BOTTOM);
 
 						form.setTitle(chart.getTitle());
-
-						for (Series series : chart.getSeries()) {
-							// series.get
-						}
+						form.setIsInverted(false);
 
 						IButton okButton = new IButton("Ok");
 						okButton.setWidth(100);
 						okButton.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
 								chart.setTitle(form.getTitle());
+								chart.setInverted(form.getIsInverted());
+
+								
+								for(Series series : chart.getSeries()){
+									chart.removeSeries(series);
+									
+									series.setOption("type",form.getType());
+									
+									series.setOption("color",form.getColor());
+									chart.addSeries(series);
+								}
+								
 								winModal.destroy();
 							};
 						});
@@ -96,16 +102,11 @@ public class ChartPortlet extends Portlet {
 					}
 				});
 
-		HeaderControl refresh = new HeaderControl(HeaderControl.REFRESH,
-				new ClickHandler() {
-					public void onClick(ClickEvent event) {
 
-					}
-				});
-
-		setHeaderControls(refresh, settings, HeaderControls.HEADER_LABEL,
+		setHeaderControls(settings, HeaderControls.HEADER_LABEL,
 				HeaderControls.MINIMIZE_BUTTON, HeaderControls.MAXIMIZE_BUTTON,
 				HeaderControls.CLOSE_BUTTON);
+		
 	}
 
 	public void addSeries(Record[] records, String label, String unit,
