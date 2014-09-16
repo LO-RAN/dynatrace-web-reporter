@@ -1,5 +1,7 @@
 package org.loran.gwt.client.datasources;
 
+import java.util.Date;
+
 import org.loran.gwt.client.config.ServerConfig;
 
 import com.smartgwt.client.data.DataSource;
@@ -7,7 +9,7 @@ import com.smartgwt.client.data.DataSourceField;
 import com.smartgwt.client.data.events.ErrorEvent;
 import com.smartgwt.client.data.events.HandleErrorHandler;
 import com.smartgwt.client.data.fields.DataSourceBooleanField;
-import com.smartgwt.client.data.fields.DataSourceLinkField;
+import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.util.SC;
@@ -15,10 +17,9 @@ import com.smartgwt.client.util.SC;
 public class DashletsDataSource extends DataSource {
  
 		
-	public DashletsDataSource(ServerConfig serverConfig, String strURL) {
-		setDataURL(serverConfig.getDashletsURL(strURL));
+	public DashletsDataSource(ServerConfig serverConfig, String dashboard, Date from, Date to) {
+		setDataURL(serverConfig.getDashletsURL(dashboard, from, to));
 
-		setClientOnly(true);
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//chartdashlet");
 				
@@ -36,8 +37,19 @@ public class DashletsDataSource extends DataSource {
 		measures.setHidden(true);
 
 		measures.setValueXPath("measures/measure");
+		
+		
+		// local fields
+		
+		DataSourceIntegerField width = new DataSourceIntegerField("width", "Width");
+		width.setDetail(true);
 
-		setFields(name, desc, showabsolutevalues, measures); 
+		DataSourceIntegerField height = new DataSourceIntegerField("height", "Height");
+		height.setDetail(true);
+
+		
+		
+		setFields(name, desc, showabsolutevalues, measures, width, height); 
 		setCacheAllData(true);
 		
 		addHandleErrorHandler(new HandleErrorHandler(){

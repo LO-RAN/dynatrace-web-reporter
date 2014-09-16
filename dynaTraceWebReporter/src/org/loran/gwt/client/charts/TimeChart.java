@@ -23,7 +23,8 @@ public class TimeChart extends Chart {
 	public TimeChart() {
 
 		
-		
+		//setBackgroundColor("#2B2B2B");
+
     		
 		setZoomType(Chart.ZoomType.X);
 		//setSpacingRight(20);
@@ -104,16 +105,18 @@ public class TimeChart extends Chart {
 
 			series.setName(label+" ("+aggregation+")")
 				  .setOption("type", chartType)
-				  .setPlotOptions(new LinePlotOptions()  
-						.setPointInterval(30 * 1000) /* 30 seconds */
-						.setPointStart(records[0].getAttributeAsLong("timestamp")
-						)
+				  .setPlotOptions(new LinePlotOptions()  						
 				  .setColor(color)
-				  );  
+				  .setAllowPointSelect(true)				  
+				  );
+			
+			//  	.setPointStart(records[0].getAttributeAsLong("timestamp"))
+			//	  .setPointInterval(30 * 1000) /* 30 seconds */
+
 
 			//for (int i = 0; i < rl.getLength(); i++) {
 			for (Record r : records) {
-				series.addPoint(new Point(r.getAttributeAsDouble(aggreg)));
+				series.addPoint(new Point(r.getAttributeAsLong("timestamp"),r.getAttributeAsDouble(aggreg)));
 			}
 			addSeries(series);
 			
