@@ -20,8 +20,12 @@ import com.smartgwt.client.data.Record;
 public class TimeChart extends Chart {
 	String title="";
 	
+	Marker marker=new Marker();
+	
 	public TimeChart() {
 
+		marker.setEnabled(false);
+		
 		
 		//setBackgroundColor("#2B2B2B");
 
@@ -107,7 +111,8 @@ public class TimeChart extends Chart {
 				  .setOption("type", chartType)
 				  .setPlotOptions(new LinePlotOptions()  						
 				  .setColor(color)
-				  .setAllowPointSelect(true)				  
+				  .setAllowPointSelect(true)	
+				  .setMarker(marker)
 				  );
 			
 			//  	.setPointStart(records[0].getAttributeAsLong("timestamp"))

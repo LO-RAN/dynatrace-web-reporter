@@ -16,6 +16,12 @@ public class ServerSettingsForm extends DynamicForm {
 	TextItem user;
 	PasswordItem password;
 
+	private static String PROTOCOL_ID= "dtProtocol";
+	private static String HOST_ID    = "dtHost";
+	private static String PORT_ID    = "dtPort";
+	private static String USER_ID    = "dtUSer";
+	private static String PASSWORD_ID= "dtPwd";
+
 	public ServerSettingsForm() {
 		protocol = new SelectItem();
 		protocol.setTitle("Protocol");
@@ -68,46 +74,46 @@ public class ServerSettingsForm extends DynamicForm {
 	}
 
 	public void clearSettings() {
-		Offline.remove("dtProtocol");
-		Offline.remove("dtHost"); //$NON-NLS-1$
-		Offline.remove("dtPort"); //$NON-NLS-1$
-		Offline.remove("dtUser"); //$NON-NLS-1$
-		Offline.remove("dtPwd"); //$NON-NLS-1$
+		Offline.remove(PROTOCOL_ID);
+		Offline.remove(HOST_ID);
+		Offline.remove(PORT_ID);
+		Offline.remove(USER_ID);
+		Offline.remove(PASSWORD_ID);
 	}
 
 	public void saveSettings() {
-		Offline.put("dtProtocol", protocol.getValueAsString());
-		Offline.put("dtHost", dtHost.getValueAsString()); //$NON-NLS-1$
-		Offline.put("dtPort", dtPort.getValueAsString()); //$NON-NLS-1$
-		Offline.put("dtUser", user.getValueAsString()); //$NON-NLS-1$
-		Offline.put("dtPwd", password.getValueAsString()); //$NON-NLS-1$
+		Offline.put(PROTOCOL_ID, protocol.getValueAsString());
+		Offline.put(HOST_ID, dtHost.getValueAsString());
+		Offline.put(PORT_ID, dtPort.getValueAsString());
+		Offline.put(USER_ID, user.getValueAsString());
+		Offline.put(PASSWORD_ID, password.getValueAsString());
 	}
 
 	public void restoreSettings() {
 
-		if (Offline.get("dtProtocol") != null) {
-			protocol.setValue(Offline.get("dtProtocol"));
+		if (Offline.get(PROTOCOL_ID) != null) {
+			protocol.setValue(Offline.get(PROTOCOL_ID));
 			// } else {
 			// protocol.setValue(protocol.getDefaultValue());
 		}
 
-		if (Offline.get("dtHost") != null) { //$NON-NLS-1$
-			dtHost.setValue(Offline.get("dtHost")); //$NON-NLS-1$
+		if (Offline.get(HOST_ID) != null) {
+			dtHost.setValue(Offline.get(HOST_ID));
 		} else {
 			dtHost.setValue("localhost"); //$NON-NLS-1$
 		}
-		if (Offline.get("dtPort") != null) { //$NON-NLS-1$
-			dtPort.setValue(Offline.get("dtPort")); //$NON-NLS-1$
+		if (Offline.get(PORT_ID) != null) {
+			dtPort.setValue(Offline.get(PORT_ID));
 		} else {
 			dtPort.setValue(8020);
 		}
-		if (Offline.get("dtUser") != null) { //$NON-NLS-1$
-			user.setValue(Offline.get("dtUser")); //$NON-NLS-1$
+		if (Offline.get(USER_ID) != null) {
+			user.setValue(Offline.get(USER_ID));
 		} else {
 			user.setValue("admin"); //$NON-NLS-1$
 		}
-		if (Offline.get("dtPwd") != null) { //$NON-NLS-1$
-			password.setValue(Offline.get("dtPwd")); //$NON-NLS-1$
+		if (Offline.get(PASSWORD_ID) != null) {
+			password.setValue(Offline.get(PASSWORD_ID));
 		} else {
 			password.setValue("admin"); //$NON-NLS-1$
 		}

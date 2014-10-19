@@ -79,7 +79,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 	// IButton showHeadersToggle;
 
 	IButton addPortletButton;
-	// IButton clearChartButton;
+	IButton clearChartButton;
 
 	DataSource dashletsDS;
 	DataSource measuresDS;
@@ -88,27 +88,27 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 	ServerConfig serverConfig;
 
-	//private static boolean enabledReflection = false;
+	// private static boolean enabledReflection = false;
 
-//	public interface MetaFactory extends BeanFactory.MetaFactory {
-//	BeanFactory<Canvas> getCanvasBeanFactory();
-//	BeanFactory<Portlet> getPortletBeanFactory();
-//	}
-//	
-//	private static void enableReflection() {
-//	if (!enabledReflection) {
-//	GWT.create(MetaFactory.class);
-//	GWT.create(ChartPortlet.MetaFactory.class);
-//	enabledReflection = true;
-//	}
-//	}
+	// public interface MetaFactory extends BeanFactory.MetaFactory {
+	// BeanFactory<Canvas> getCanvasBeanFactory();
+	// BeanFactory<Portlet> getPortletBeanFactory();
+	// }
+	//
+	// private static void enableReflection() {
+	// if (!enabledReflection) {
+	// GWT.create(MetaFactory.class);
+	// GWT.create(ChartPortlet.MetaFactory.class);
+	// enabledReflection = true;
+	// }
+	// }
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 
-//		 enableReflection();
+		// enableReflection();
 
 		// // The EditPane is the area in which the components can be placed
 		// final EditPane editPane = new EditPane();
@@ -153,6 +153,8 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 			}
 		});
+		
+
 
 		// clearSettings();
 
@@ -219,7 +221,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		};
 
 		profilesGrid.setID("profilesGrid"); //$NON-NLS-1$
-		profilesGrid.setHeight(150);
+		profilesGrid.setHeight("50%");
 		profilesGrid.setWidth100();
 		profilesGrid.setTitle("Profiles");
 		profilesGrid.setCanExpandRecords(true);
@@ -232,7 +234,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 				ListGrid agentsDetailsGrid = new ListGrid();
 				agentsDetailsGrid.setWidth100();
-				agentsDetailsGrid.setHeight(100);
+				agentsDetailsGrid.setHeight(200);
 
 				DataSource licensedAgentsDS = new LicensedAgentsDataSource();
 
@@ -248,7 +250,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		licenseGrid.setDetailDS(new LicensedAgentsDataSource());
 
 		licenseGrid.setID("licenseGrid"); //$NON-NLS-1$
-		licenseGrid.setHeight(150);
+		licenseGrid.setHeight("50%");
 		licenseGrid.setWidth100();
 		licenseGrid.setTitle("License");
 		licenseGrid.setCanExpandRecords(true);
@@ -268,6 +270,8 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 					ChartPortlet portlet = new ChartPortlet(record, chartForm
 							.getType(), chartForm.getIsInverted());
+					
+					
 
 					// portlet.setShowHeader(showHeadersToggle.getSelected());
 					portal.addPortlet(portlet, 0, rowNum, rowOffset);
@@ -278,6 +282,8 @@ public class DynaTraceWebReporter implements EntryPoint {
 					}
 
 				}
+				
+				dashletsGrid.deselectAllRecords();
 			}
 		});
 
@@ -285,18 +291,23 @@ public class DynaTraceWebReporter implements EntryPoint {
 		// showHeadersToggle.setWidth(150);
 		// showHeadersToggle.setActionType(SelectionType.CHECKBOX);
 
-		/*
-		 * clearChartButton = new IButton("Clear Chart");
-		 * clearChartButton.setWidth(150); clearChartButton.addClickHandler(new
-		 * ClickHandler() { public void onClick(ClickEvent event) {
-		 * 
-		 * chart.clear(); } });
-		 */
+		clearChartButton = new IButton("Clear dashlets");
+		clearChartButton.setWidth(150);
+		clearChartButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				for (Portlet portlet : portal.getPortlets()) {
+					portlet.destroy();
+					;
+				}
+			}
+		});
+
 		dashboardsGrid.addDoubleClickHandler(new DoubleClickHandler() {
 			public void onDoubleClick(DoubleClickEvent event) {
 				addPortletButton.setDisabled(true);
 
 				Record record = dashboardsGrid.getSelectedRecord();
+				if(record != null){
 
 				dashletsDS = new DashletsDataSource(serverConfig, record
 						.getAttributeAsString("id"), record
@@ -306,7 +317,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 				dashletsGrid.setDataSource(dashletsDS);
 
 				dashletsGrid.fetchData();
-
+				}
 			}
 
 		});
@@ -349,6 +360,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 				DataSource dashboardsDS = new DashboardsDataSource(serverConfig);
 				dashboardsGrid.setDataSource(dashboardsDS);
+				dashboardsGrid.groupBy("session");
 				dashboardsGrid.fetchData();
 
 				dashboardsGrid.getField("hrefrel").setCellFormatter( //$NON-NLS-1$
@@ -393,22 +405,21 @@ public class DynaTraceWebReporter implements EntryPoint {
 		serverSection.setItems(formlayout);
 
 		SectionStackSection otherSection = new SectionStackSection("Other...");
-		
-		
-        HTMLFlow htmlFlow = new HTMLFlow();
-        htmlFlow.setOverflow(Overflow.AUTO);
-        htmlFlow.setPadding(10);
 
-        String contents = "<b>Place holder 1</b> - Title 1<br>Description 1" 
-        				 +"<br><br>"
-        		         +"<b>Place holder 2</b> - Title 2<br>Description 2" 
-        				 +"<br><br>"
-        		         +"<b>Place holder 3</b> - Title 3<br>Description 3";
+		HTMLFlow htmlFlow = new HTMLFlow();
+		htmlFlow.setOverflow(Overflow.AUTO);
+		htmlFlow.setPadding(10);
 
-        htmlFlow.setContents(contents);
+		String contents = "<b>Place holder 1</b> - Title 1<br>Description 1"
+				+ "<br><br>"
+				+ "<b>Place holder 2</b> - Title 2<br>Description 2"
+				+ "<br><br>"
+				+ "<b>Place holder 3</b> - Title 3<br>Description 3";
+
+		htmlFlow.setContents(contents);
 
 		otherSection.setItems(htmlFlow);
-		
+
 		// otherSection.setItems(new HelpPane());
 		otherSection.setExpanded(true);
 
@@ -423,7 +434,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		VLayout chartlayout = new VLayout();
 		chartlayout.addMember(chartForm);
 		chartlayout.addMember(addPortletButton);
-		// chartlayout.addMember(destroyButton);
+		chartlayout.addMember(clearChartButton);
 		// chartlayout.addMember(showHeadersToggle);
 
 		gridslayout.addMember(chartlayout);

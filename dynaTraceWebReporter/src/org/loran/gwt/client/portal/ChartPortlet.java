@@ -4,6 +4,7 @@ import org.loran.gwt.client.charts.ResizeableChartCanvas;
 import org.loran.gwt.client.charts.TimeChart;
 import org.loran.gwt.client.forms.ChartForm;
 import org.moxieapps.gwt.highcharts.client.Series;
+import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
 
 import com.smartgwt.client.bean.BeanFactory;
 import com.smartgwt.client.data.Record;
@@ -14,6 +15,7 @@ import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HeaderControl;
 import com.smartgwt.client.widgets.IButton;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -122,8 +124,21 @@ public class ChartPortlet extends Portlet {
 								winModal.destroy();
 							};
 						});
+						
+						Label portletInfo = new Label();
+						portletInfo.setHeight(10);
+
+					portletInfo.setContents(
+								 " Column:"+getPortalPosition().getColNum()
+								+" Row:"+getPortalPosition().getRowNum()
+								+" Position:"+getPortalPosition().getPosition()
+								+" Width:"+getWidthAsString()
+								+" Height:"+getHeightAsString()
+								);
+						
 
 						winModal.addItem(form);
+						winModal.addItem(portletInfo);
 						winModal.addItem(okButton);
 						winModal.show();
 					}

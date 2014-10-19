@@ -30,12 +30,14 @@ public class DashboardsDataSource extends DataSource {
 		id.setPrimaryKey(true);
 		
 		DataSourceTextField session = new DataSourceTextField("session", "Source");  
+		session.setDetail(true);;
 		
 		DataSourceTextField desc = new DataSourceTextField("description", "Description");
 		desc.setDetail(true);
+		
 		DataSourceLinkField href = new DataSourceLinkField("hrefrel", "Report"); 
-
 		//href.setDetail(true);
+
 		DateRangeValidator nowDateValidator = new DateRangeValidator();
 
 		final DataSourceDateTimeField to = new DataSourceDateTimeField("to", "To");
