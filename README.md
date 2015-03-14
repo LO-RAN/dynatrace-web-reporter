@@ -1,7 +1,7 @@
 # dynatrace-web-reporter
 (early stage)
 
-Leverages [https://community.compuwareapm.com dynaTrace] [https://community.compuwareapm.com/community/display/DOCDT56/Server+REST+Interfaces REST] interfaces for reporting and server management.
+Leverages [https://community.compuwareapm.com dynaTrace] [https://community.compuwareapm.com/community/display/DOCDT61/Server+REST+Interfaces REST] interfaces for reporting and server management.
 
 Provides a web frontend to SaaS dynaTrace instance.
 
