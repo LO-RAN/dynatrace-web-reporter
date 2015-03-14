@@ -12,4 +12,3 @@ Uses [http://www.moxiegroup.com/moxieapps/gwt-highcharts/ GWT HighCharts] for ch
 [http://dynatracewebreporter.appspot.com/ https://sites.google.com/site/laurentizac/home/sample.png]
 
 
-<g:plusone size="medium"></g:plusone>
