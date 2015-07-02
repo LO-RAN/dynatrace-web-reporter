@@ -1,9 +1,5 @@
 package org.loran.gwt.client;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.loran.gwt.client.config.ServerConfig;
 import org.loran.gwt.client.datasources.ConfigurationsDataSource;
 import org.loran.gwt.client.datasources.DashboardsDataSource;
@@ -19,8 +15,6 @@ import org.loran.gwt.client.portal.MyPortal;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.shared.DateTimeFormat;
-import com.smartgwt.client.bean.BeanFactory;
 import com.smartgwt.client.core.KeyIdentifier;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
@@ -29,24 +23,16 @@ import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.ResultSet;
 import com.smartgwt.client.rpc.HandleErrorCallback;
 import com.smartgwt.client.rpc.RPCManager;
-import com.smartgwt.client.tools.EditPane;
-import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.AnimationAcceleration;
 import com.smartgwt.client.types.ExpansionMode;
 import com.smartgwt.client.types.ListGridEditEvent;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.types.VisibilityMode;
-import com.smartgwt.client.util.JSOHelper;
 import com.smartgwt.client.util.Page;
 import com.smartgwt.client.util.PageKeyHandler;
 import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.AnimationCallback;
-import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.IButton;
-import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.events.DoubleClickEvent;
@@ -195,6 +181,28 @@ public class DynaTraceWebReporter implements EntryPoint {
 		dashboardsGrid.setSelectionType(SelectionStyle.SINGLE);
 		dashboardsGrid.setEditEvent(ListGridEditEvent.CLICK);
 
+		dashboardsGrid.groupBy("session");
+
+		dashboardsGrid.addDoubleClickHandler(new DoubleClickHandler() {
+			public void onDoubleClick(DoubleClickEvent event) {
+				addPortletButton.setDisabled(true);
+
+				Record record = dashboardsGrid.getSelectedRecord();
+				if(record != null){
+
+				dashletsDS = new DashletsDataSource(serverConfig, record
+						.getAttributeAsString("id"), record
+						.getAttributeAsDate("from"), record
+						.getAttributeAsDate("to")); //$NON-NLS-1$
+
+				dashletsGrid.setDataSource(dashletsDS);
+
+				dashletsGrid.fetchData();
+				}
+			}
+
+		});
+
 		dashletsGrid = new ListGrid();
 		dashletsGrid.setID("dashletsGrid"); //$NON-NLS-1$
 		dashletsGrid.setHeight100();
@@ -291,7 +299,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 		// showHeadersToggle.setWidth(150);
 		// showHeadersToggle.setActionType(SelectionType.CHECKBOX);
 
-		clearChartButton = new IButton("Clear dashlets");
+		clearChartButton = new IButton("Remove all dashlets");
 		clearChartButton.setWidth(150);
 		clearChartButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -302,25 +310,6 @@ public class DynaTraceWebReporter implements EntryPoint {
 			}
 		});
 
-		dashboardsGrid.addDoubleClickHandler(new DoubleClickHandler() {
-			public void onDoubleClick(DoubleClickEvent event) {
-				addPortletButton.setDisabled(true);
-
-				Record record = dashboardsGrid.getSelectedRecord();
-				if(record != null){
-
-				dashletsDS = new DashletsDataSource(serverConfig, record
-						.getAttributeAsString("id"), record
-						.getAttributeAsDate("from"), record
-						.getAttributeAsDate("to")); //$NON-NLS-1$
-
-				dashletsGrid.setDataSource(dashletsDS);
-
-				dashletsGrid.fetchData();
-				}
-			}
-
-		});
 
 		dashletsGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
@@ -360,7 +349,6 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 				DataSource dashboardsDS = new DashboardsDataSource(serverConfig);
 				dashboardsGrid.setDataSource(dashboardsDS);
-				dashboardsGrid.groupBy("session");
 				dashboardsGrid.fetchData();
 
 				dashboardsGrid.getField("hrefrel").setCellFormatter( //$NON-NLS-1$
@@ -414,7 +402,9 @@ public class DynaTraceWebReporter implements EntryPoint {
 				+ "<br><br>"
 				+ "<b>Place holder 2</b> - Title 2<br>Description 2"
 				+ "<br><br>"
-				+ "<b>Place holder 3</b> - Title 3<br>Description 3";
+				+ "<b>Place holder 3</b> - Title 3<br>Description 3"
+		+ "<br><br>"
+		+ "Built with <a href=\"https://code.google.com/p/smartgwt\"><b>SmartGWT</b></a>";
 
 		htmlFlow.setContents(contents);
 
@@ -452,10 +442,5 @@ public class DynaTraceWebReporter implements EntryPoint {
 		main.draw();
 	}
 
-	private void setShowPortletHeaders(boolean isShown) {
-		for (Portlet portlet : portal.getPortlets()) {
-			portlet.setShowHeader(false);
-		}
-	}
 
 }

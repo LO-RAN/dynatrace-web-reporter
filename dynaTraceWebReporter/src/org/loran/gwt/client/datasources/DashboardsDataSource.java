@@ -12,11 +12,7 @@ import com.smartgwt.client.data.fields.DataSourceLinkField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.form.fields.FormItem;
-import com.smartgwt.client.widgets.form.fields.MiniDateRangeItem;
 import com.smartgwt.client.widgets.form.validator.DateRangeValidator;
-import com.smartgwt.client.widgets.form.validator.RequiredIfFunction;
-import com.smartgwt.client.widgets.form.validator.RequiredIfValidator;
 
 public class DashboardsDataSource extends DataSource {
  
@@ -29,8 +25,10 @@ public class DashboardsDataSource extends DataSource {
 		DataSourceTextField id = new DataSourceTextField("id", "Dashboard");  
 		id.setPrimaryKey(true);
 		
-		DataSourceTextField session = new DataSourceTextField("session", "Source");  
-		session.setDetail(true);;
+		DataSourceTextField session = new DataSourceTextField("session", "Session");  
+		session.setDetail(true);
+		
+		
 		
 		DataSourceTextField desc = new DataSourceTextField("description", "Description");
 		desc.setDetail(true);

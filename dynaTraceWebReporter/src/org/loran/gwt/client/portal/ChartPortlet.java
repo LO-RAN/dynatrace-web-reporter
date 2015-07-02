@@ -83,6 +83,9 @@ public class ChartPortlet extends Portlet {
 						winModal.setIsModal(true);
 						winModal.setShowModalMask(true);
 						winModal.centerInPage();
+						winModal.setShadowDepth(10);
+						winModal.setShowShadow(true);
+
 
 						winModal.addCloseClickHandler(new CloseClickHandler() {
 							public void onCloseClick(CloseClickEvent event) {

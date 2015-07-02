@@ -55,6 +55,7 @@ public class ServerSettingsForm extends DynamicForm {
 		setWidth100();
 		setTitleWidth("*"); //$NON-NLS-1$
 		setFields(new FormItem[] { protocol, dtHost, dtPort, user, password });
+
 	}
 	
 	public String getUser(){
