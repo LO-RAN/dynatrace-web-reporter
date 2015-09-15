@@ -1,7 +1,5 @@
 package org.loran.gwt.client.datasources;
 
-import org.loran.gwt.client.config.ServerConfig;
-
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.DataSourceField;
 import com.smartgwt.client.data.fields.DataSourceFloatField;
@@ -16,15 +14,12 @@ public class MeasuresDataSource extends DataSource {
 
 		DataSourceTextField measure = new DataSourceTextField("measure",
 				"Measure");
-		measure.setPrimaryKey(true);
 
 		DataSourceField measurements = new DataSourceField();
 		measurements.setName("measurements");
-
 		measurements.setTypeAsDataSource(new MeasurementsDataSource());
 		measurements.setMultiple(true);
 		measurements.setHidden(true);
-
 		measurements.setValueXPath("measurement");
 
 		DataSourceTextField unit = new DataSourceTextField("unit", "unit");

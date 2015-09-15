@@ -4,14 +4,13 @@ import org.loran.gwt.client.charts.ResizeableChartCanvas;
 import org.loran.gwt.client.charts.TimeChart;
 import org.loran.gwt.client.forms.ChartForm;
 import org.moxieapps.gwt.highcharts.client.Series;
-import org.moxieapps.gwt.highcharts.client.Series.Type;
-import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions;
 
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.types.HeaderControls;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.HeaderControl;
 import com.smartgwt.client.widgets.IButton;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -25,9 +24,28 @@ public class ChartPortlet extends Portlet {
 	ChartForm form;
 	Record record;
 
+//    public interface MetaFactory extends BeanFactory.MetaFactory {  
+//        BeanFactory<ChartPortlet> getChartPortletBeanFactory();  
+//    }  
+//    
+//    // This method is called just-in-time when serializing an EditContext,  
+//    // so that you can update any properties that you want to  
+//    // automatically persist.  
+//    public void updateEditNode(EditContext editContext, EditNode editNode) {  
+//        super.updateEditNode(editContext, editNode);  
+//  
+//        Canvas properties = new Canvas();  
+//        properties.setBackgroundColor(getBackgroundColor());  
+//  
+//        editContext.setNodeProperties(editNode, properties, true);  
+//    }  
+//
+    
+    
 	public ChartPortlet(ListGridRecord record, String type, Boolean isInverted) {
 
 		setTitle(record.getAttributeAsString("name"));
+		
 
 		Record[] series = record.getAttributeAsRecordArray("measures"); //$NON-NLS-1$
 
@@ -46,6 +64,7 @@ public class ChartPortlet extends Portlet {
 
 		ResizeableChartCanvas chartCanvas = new ResizeableChartCanvas(chart);
 		addItem(chartCanvas);
+		
 
 		// add a gear on the header, giving access to portlet settings
 		HeaderControl settings = new HeaderControl(HeaderControl.SETTINGS,
@@ -59,6 +78,9 @@ public class ChartPortlet extends Portlet {
 						winModal.setIsModal(true);
 						winModal.setShowModalMask(true);
 						winModal.centerInPage();
+						winModal.setShadowDepth(10);
+						winModal.setShowShadow(true);
+
 
 						winModal.addCloseClickHandler(new CloseClickHandler() {
 							public void onCloseClick(CloseClickEvent event) {
@@ -73,7 +95,9 @@ public class ChartPortlet extends Portlet {
 						form.setLayoutAlign(VerticalAlignment.BOTTOM);
 
 						form.setTitle(chart.getTitle());
-						form.setIsInverted(false);
+						//form.setIsInverted(false);
+						//form.setBackgroundColor(chart.getOptions().get("/chart/backgroundColor").toString());
+						
 
 						IButton okButton = new IButton("Ok");
 						okButton.setWidth(100);
@@ -88,15 +112,31 @@ public class ChartPortlet extends Portlet {
 									
 									series.setOption("type",form.getType());
 									
-									series.setOption("color",form.getColor());
+									series.setOption("color",form.getChartColor());
+									
+									chart.setBackgroundColor(form.getBackgroundColor());
+									
 									chart.addSeries(series);
 								}
 								
 								winModal.destroy();
 							};
 						});
+						
+						Label portletInfo = new Label();
+						portletInfo.setHeight(10);
+
+					portletInfo.setContents(
+								 " Column:"+getPortalPosition().getColNum()
+								+" Row:"+getPortalPosition().getRowNum()
+								+" Position:"+getPortalPosition().getPosition()
+								+" Width:"+getWidthAsString()
+								+" Height:"+getHeightAsString()
+								);
+						
 
 						winModal.addItem(form);
+						winModal.addItem(portletInfo);
 						winModal.addItem(okButton);
 						winModal.show();
 					}
@@ -106,6 +146,7 @@ public class ChartPortlet extends Portlet {
 		setHeaderControls(settings, HeaderControls.HEADER_LABEL,
 				HeaderControls.MINIMIZE_BUTTON, HeaderControls.MAXIMIZE_BUTTON,
 				HeaderControls.CLOSE_BUTTON);
+		
 		
 	}
 

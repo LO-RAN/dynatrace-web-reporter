@@ -15,7 +15,6 @@ public class ProfilesDataSource extends DataSource {
  
 	public ProfilesDataSource(ServerConfig serverConfig) {
 		setDataURL(serverConfig.getProfilesURL());
-		setClientOnly(true);
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//systemprofile");
 				

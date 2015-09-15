@@ -4,8 +4,6 @@ import java.util.LinkedHashMap;
 
 import org.moxieapps.gwt.highcharts.client.Series.Type;
 
-import com.smartgwt.client.data.Record;
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.PropertySheet;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.ColorPickerItem;
@@ -16,6 +14,7 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
 public class ChartForm extends PropertySheet {
 	SelectItem chartType;
 	ColorPickerItem chartColor;
+	ColorPickerItem backgroundColor;
 	TextItem chartTitle;
 	CheckboxItem isInverted;
 	
@@ -58,13 +57,16 @@ public class ChartForm extends PropertySheet {
 		chartColor = new ColorPickerItem();
 		chartColor.setTitle("Chart Color");
 		
+		backgroundColor = new ColorPickerItem();
+		backgroundColor.setTitle("Background Color");
+		
 		isInverted = new CheckboxItem();
 		isInverted.setTitle("Invert axes");
 		isInverted.setValue(false);
 
 		setWidth(250);
 		setTitleWidth("*"); //$NON-NLS-1$
-		setFields(new FormItem[] { chartTitle, chartType, chartColor, isInverted });
+		setFields(new FormItem[] { chartTitle, chartType, chartColor, backgroundColor, isInverted });
 	}
 
 
@@ -89,12 +91,20 @@ public class ChartForm extends PropertySheet {
 	public String getType(){
 		return chartType.getValueAsString();
 	}
-public String getColor(){
-	return chartColor.getValueAsString();
-}
+	public String getChartColor(){
+		return chartColor.getValueAsString();
+	}
 
-public void setColor(String color){
-	chartColor.setValue(color);
-	
-}
+	public void setChartColor(String color){
+		chartColor.setValue(color);
+		
+	}
+	public String getBackgroundColor(){
+		return backgroundColor.getValueAsString();
+	}
+
+	public void setBackgroundColor(String color){
+		backgroundColor.setValue(color);
+		
+	}
 }

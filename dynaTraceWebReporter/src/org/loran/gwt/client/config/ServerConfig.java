@@ -1,5 +1,7 @@
 package org.loran.gwt.client.config;
 
+import java.util.Date;
+
 
 public class ServerConfig {
 
@@ -9,8 +11,7 @@ public class ServerConfig {
 	private String dtHost;
 	private String dtPort;
 
-	public ServerConfig(String user, String password, String protocol,
-			String dtHost, String dtPort) {
+	public ServerConfig(String user, String password, String protocol,	String dtHost, String dtPort) {
 		this.user = user;
 		this.password = password;
 		this.protocol = protocol;
@@ -27,10 +28,18 @@ public class ServerConfig {
 		return getProxiedURLPrefix() + "/rest/management/dashboards";
 	}
 	
-	public String getDashletsURL(String dashBoardURL) {
-		return getProxiedURLPrefix() 
-				+ com.google.gwt.http.client.URL.encodeQueryString(dashBoardURL)
-				+ "?type=xml";
+	public String getDashletsURL(String dashBoard, Date from , Date to) {
+		String URL= getProxiedURLPrefix() 
+				+ "/rest/management/dashboard/"
+				+ com.google.gwt.http.client.URL.encodeQueryString(
+						dashBoard
+				);
+		// add datetime range if both values are not null
+		if(! (from==null) && ! (to==null)){
+			URL+= "?filter=tf:CustomTimeframe?"+from.getTime()+":"+to.getTime();
+		}
+		
+		return URL;
 	}
 
 	public String getProfilesURL() {
@@ -53,5 +62,10 @@ public class ServerConfig {
 				+ "user="+ com.google.gwt.http.client.URL.encodeQueryString(user) 
 				+ "&pwd="+ com.google.gwt.http.client.URL.encodeQueryString(password) 
 				+ "&url="+ getRawURLPrefix();
+	}
+
+	public String getLicenseURL() {
+
+		return getProxiedURLPrefix() + "/rest/management/server/license/information";
 	}
 }

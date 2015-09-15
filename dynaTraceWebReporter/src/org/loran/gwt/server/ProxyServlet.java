@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.servlet.ServletException;
@@ -58,6 +57,9 @@ public class ProxyServlet extends HttpServlet {
 			// connection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 			// connection.setRequestProperty("Accept-Language","en-US,en;q=0.5");
 
+			// wait max 30s (depending on time range, data can take a while to come back)
+			connection.setConnectTimeout(30000);
+			
 			connection.connect();
 			if (connection.getResponseCode() == 200) {
 				InputStream content = (InputStream) connection.getInputStream();

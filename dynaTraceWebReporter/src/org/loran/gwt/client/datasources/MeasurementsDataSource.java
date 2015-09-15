@@ -13,7 +13,6 @@ public class MeasurementsDataSource extends DataSource{
 		setDataFormat(DSDataFormat.XML);
 
 		DataSourceIntegerField timestamp = new DataSourceIntegerField("timestamp", "timestamp");  
-		timestamp.setPrimaryKey(true);
 		
 		DataSourceFloatField avg = new DataSourceFloatField("avg", "avg");  
 		DataSourceFloatField min = new DataSourceFloatField("min", "min");  

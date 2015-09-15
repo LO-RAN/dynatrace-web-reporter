@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 jarsExcludedFromWebInfLib=
+lastWarOutDir=E\:/projects/git/dynatrace-web-reporter/dynaTraceWebReporter/war
 launchConfigExternalUrlPrefix=
 warSrcDir=war
-warSrcDirIsOutput=true
+warSrcDirIsOutput=false
