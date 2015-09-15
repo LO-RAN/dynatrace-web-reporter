@@ -1,5 +1,7 @@
 package org.loran.gwt.client.datasources;
 
+import java.util.Date;
+
 import org.loran.gwt.client.config.ServerConfig;
 
 import com.smartgwt.client.data.DataSource;
@@ -9,8 +11,8 @@ import com.smartgwt.client.types.DSDataFormat;
 
 public class MapDataSource extends DataSource {
 
-	public MapDataSource(ServerConfig serverConfig, String strURL, String measureName) {
-		setDataURL(serverConfig.getDashletsURL(strURL));
+	public MapDataSource(ServerConfig serverConfig, String strURL, String measureName, Date from, Date to) {
+		setDataURL(serverConfig.getDashletsURL(strURL, from, to));
 		setDataFormat(DSDataFormat.XML);
 		setRecordXPath("//worldmapdashlet/worldmap/datapoint");
 
