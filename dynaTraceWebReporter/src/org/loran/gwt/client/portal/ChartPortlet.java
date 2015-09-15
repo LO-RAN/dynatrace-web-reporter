@@ -4,15 +4,10 @@ import org.loran.gwt.client.charts.ResizeableChartCanvas;
 import org.loran.gwt.client.charts.TimeChart;
 import org.loran.gwt.client.forms.ChartForm;
 import org.moxieapps.gwt.highcharts.client.Series;
-import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
 
-import com.smartgwt.client.bean.BeanFactory;
 import com.smartgwt.client.data.Record;
-import com.smartgwt.client.tools.EditContext;
-import com.smartgwt.client.tools.EditNode;
 import com.smartgwt.client.types.HeaderControls;
 import com.smartgwt.client.types.VerticalAlignment;
-import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HeaderControl;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;

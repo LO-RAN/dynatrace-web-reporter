@@ -4,8 +4,6 @@ import java.util.LinkedHashMap;
 
 import org.moxieapps.gwt.highcharts.client.Series.Type;
 
-import com.smartgwt.client.data.Record;
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.PropertySheet;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.ColorPickerItem;

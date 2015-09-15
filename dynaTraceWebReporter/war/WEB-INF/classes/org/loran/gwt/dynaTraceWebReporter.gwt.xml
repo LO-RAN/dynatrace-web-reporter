@@ -24,16 +24,11 @@
 
   <inherits name="org.moxieapps.gwt.highcharts.Highcharts"/>
 
-  <!-- Inherit the default GWT style sheet.  You can change       -->
-  <!-- the theme of your GWT application by uncommenting          -->
-  <!-- any one of the following lines.                            -->
-
   <!-- Other module inherits      -->
                                      
    <inherits name="com.smartgwt.SmartGwtNoScript"/>
-   <inherits name="com.smartclient.theme.graphite.Graphite"/>
    <inherits name="com.smartgwt.tools.SmartGwtTools"/>
-  
+    
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.loran.gwt.client.DynaTraceWebReporter'/>
 
