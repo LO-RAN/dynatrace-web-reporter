@@ -14,7 +14,6 @@ import org.loran.gwt.client.portal.ChartPortlet;
 import org.loran.gwt.client.portal.MyPortal;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.core.KeyIdentifier;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
@@ -23,14 +22,17 @@ import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.ResultSet;
 import com.smartgwt.client.rpc.HandleErrorCallback;
 import com.smartgwt.client.rpc.RPCManager;
+import com.smartgwt.client.types.DeviceMode;
 import com.smartgwt.client.types.ExpansionMode;
 import com.smartgwt.client.types.ListGridEditEvent;
 import com.smartgwt.client.types.Overflow;
+import com.smartgwt.client.types.PageOrientation;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.util.Page;
 import com.smartgwt.client.util.PageKeyHandler;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -47,12 +49,16 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.Portlet;
 import com.smartgwt.client.widgets.layout.SectionStack;
 import com.smartgwt.client.widgets.layout.SectionStackSection;
+import com.smartgwt.client.widgets.layout.SplitPane;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class DynaTraceWebReporter implements EntryPoint {
+	
+	
+	SplitPane splitPane;
 	ListGrid dashboardsGrid;
 	ListGrid dashletsGrid;
 	ListGrid profilesGrid;
@@ -74,59 +80,11 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 	ServerConfig serverConfig;
 
-	// private static boolean enabledReflection = false;
-
-	// public interface MetaFactory extends BeanFactory.MetaFactory {
-	// BeanFactory<Canvas> getCanvasBeanFactory();
-	// BeanFactory<Portlet> getPortletBeanFactory();
-	// }
-	//
-	// private static void enableReflection() {
-	// if (!enabledReflection) {
-	// GWT.create(MetaFactory.class);
-	// GWT.create(ChartPortlet.MetaFactory.class);
-	// enabledReflection = true;
-	// }
-	// }
-
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 
-		// enableReflection();
-
-		// // The EditPane is the area in which the components can be placed
-		// final EditPane editPane = new EditPane();
-		// editPane.setBorder("1px solid black");
-		// JSOHelper.setAttribute(editPane.getConfig(), "editMode", false);
-		//
-		// Button destroyButton = new Button("Destroy and Recreate");
-		// destroyButton.setAutoFit(true);
-		// destroyButton.setLayoutAlign(Alignment.RIGHT);
-		// destroyButton.addClickHandler(new ClickHandler() {
-		// @Override
-		// public void onClick(ClickEvent event) {
-		// // We save the editPane node data in a variable
-		// final String paletteNodes = editPane.serializeAllEditNodes();
-		//
-		// // Animate the disappearance of the editPane, since otherwise
-		// // everything happens at once.
-		// editPane.animateFade(0, new AnimationCallback() {
-		// @Override
-		// public void execute(boolean earlyFinish) {
-		// // Once the animation is finished, destroy all the nodes
-		// editPane.destroyAll();
-		//
-		// // Then add them back from the serialized form
-		// editPane.addPaletteNodesFromXML(paletteNodes);
-		//
-		// // And make us visible again
-		// editPane.setOpacity(100);
-		// }
-		// }, 2000, AnimationAcceleration.SMOOTH_END);
-		// }
-		// });
 
 		RPCManager.setHandleErrorCallback(new HandleErrorCallback() {
 
@@ -142,26 +100,25 @@ public class DynaTraceWebReporter implements EntryPoint {
 		
 
 
-		// clearSettings();
-
 		HLayout main = new HLayout();
 		main.setWidth100();
 		main.setHeight100();
+		// make the UI larger so that it's easier to handle on a touch screen
+		Canvas.resizeControls(10);
+		Canvas.resizeFonts(2);
 
-		// added to allow developer's console to be started with "SHIFT+S"
+		// added to allow developer's console to be started with "SHIFT+C"
 		// shortcut
-		if (!GWT.isScript()) {
 			KeyIdentifier debugKey = new KeyIdentifier();
-			// debugKey.setCtrlKey(true);
 			debugKey.setShiftKey(true);
-			debugKey.setKeyName("S"); //$NON-NLS-1$
+			//debugKey.setCtrlKey(true);
+			debugKey.setKeyName("C"); //$NON-NLS-1$
 
 			Page.registerKey(debugKey, new PageKeyHandler() {
 				public void execute(String keyName) {
 					SC.showConsole();
 				}
 			});
-		}
 
 		df = new ServerSettingsForm();
 		df.restoreSettings();
@@ -292,12 +249,10 @@ public class DynaTraceWebReporter implements EntryPoint {
 				}
 				
 				dashletsGrid.deselectAllRecords();
+				
+				//splitPane.showDetailPane();
 			}
 		});
-
-		// showHeadersToggle = new IButton("Show portlet headers");
-		// showHeadersToggle.setWidth(150);
-		// showHeadersToggle.setActionType(SelectionType.CHECKBOX);
 
 		clearChartButton = new IButton("Remove all dashlets");
 		clearChartButton.setWidth(150);
@@ -370,7 +325,7 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 				addPortletButton.setDisabled(true);
 				// chart.clear();
-
+				splitPane.showDetailPane();
 			}
 		});
 
@@ -383,8 +338,8 @@ public class DynaTraceWebReporter implements EntryPoint {
 
 		// main.addMember(formlayout);
 		SectionStack leftSideLayout = new SectionStack();
-		leftSideLayout.setWidth(280);
-		leftSideLayout.setShowResizeBar(true);
+		leftSideLayout.setWidth(300);
+		//leftSideLayout.setShowResizeBar(true);
 		leftSideLayout.setVisibilityMode(VisibilityMode.MULTIPLE);
 		leftSideLayout.setAnimateSections(true);
 
@@ -392,30 +347,26 @@ public class DynaTraceWebReporter implements EntryPoint {
 		serverSection.setExpanded(true);
 		serverSection.setItems(formlayout);
 
-		SectionStackSection otherSection = new SectionStackSection("Other...");
+		SectionStackSection aboutSection = new SectionStackSection("About");
 
 		HTMLFlow htmlFlow = new HTMLFlow();
 		htmlFlow.setOverflow(Overflow.AUTO);
 		htmlFlow.setPadding(10);
 
-		String contents = "<b>Place holder 1</b> - Title 1<br>Description 1"
-				+ "<br><br>"
-				+ "<b>Place holder 2</b> - Title 2<br>Description 2"
-				+ "<br><br>"
-				+ "<b>Place holder 3</b> - Title 3<br>Description 3"
-		+ "<br><br>"
-		+ "Built with <a href=\"https://code.google.com/p/smartgwt\"><b>SmartGWT</b></a>";
+		String contents = "Built by <a href=\"mailto:laurent.izac@dynatrace.com\"target=\"_blank\">Laurent IZAC (Dynatrace)</a><br><br>Built with :<br>"
+		+" <a href=\"https://www.smartclient.com/smartgwt/showcase\" target=\"_blank\"><b>SmartGWT LGPL 12.0p</b></a>"
+		+" <br><a href=\"https://www.moxiegroup.com/moxieapps/gwt-highcharts/showcase/#main\" target=\"_blank\"><b>GWT Highcharts 1.7.0</b></a>";
 
 		htmlFlow.setContents(contents);
 
-		otherSection.setItems(htmlFlow);
+		aboutSection.setItems(htmlFlow);
 
 		// otherSection.setItems(new HelpPane());
-		otherSection.setExpanded(true);
+		aboutSection.setExpanded(false);
 
-		leftSideLayout.setSections(serverSection, otherSection);
+		leftSideLayout.setSections(serverSection, aboutSection);
 
-		main.addMember(leftSideLayout);
+		//main.addMember(leftSideLayout);
 
 		HLayout gridslayout = new HLayout();
 		gridslayout.addMember(dashboardsGrid);
@@ -438,8 +389,27 @@ public class DynaTraceWebReporter implements EntryPoint {
 		VLayout rightSideLayout = new VLayout();
 		rightSideLayout.addMember(gridslayout);
 		rightSideLayout.addMember(portal);
-		main.addMember(rightSideLayout);
+		//main.addMember(rightSideLayout);
+		
+		splitPane = new SplitPane();
+		
+        splitPane.setNavigationTitle("Connection");  
+        //splitPane.setListTitle("Selection & content");
+        splitPane.setDetailTitle("Selection & content");
+        //splitPane.setShowLeftButton(true);  
+        //splitPane.setShowRightButton(true);  
+//        splitPane.setShowMiniNav(true);
+        splitPane.setDeviceMode(DeviceMode.TABLET);  
+        splitPane.setPageOrientation(PageOrientation.PORTRAIT);
+
+        splitPane.setNavigationPane(leftSideLayout);  
+        //splitPane.setListPane(rightSideLayout);  
+        splitPane.setDetailPane(rightSideLayout);  
+
+		main.addMember(splitPane);
+        
 		main.draw();
+		splitPane.showNavigationPane();
 	}
 
 

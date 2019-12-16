@@ -34,19 +34,21 @@ public class DashboardsDataSource extends DataSource {
 		desc.setDetail(true);
 		
 		DataSourceLinkField href = new DataSourceLinkField("hrefrel", "Report"); 
-		//href.setDetail(true);
+		href.setDetail(true);
 
 		DateRangeValidator nowDateValidator = new DateRangeValidator();
 
-		final DataSourceDateTimeField to = new DataSourceDateTimeField("to", "To");
+		DataSourceDateTimeField to = new DataSourceDateTimeField("to", "To");
 		to.setCanEdit(true);
 		to.setValidators(nowDateValidator);
+		to.setDetail(true);
 
 		DataSourceDateTimeField from = new DataSourceDateTimeField("from", "From");
 		from.setCanEdit(true);
 		nowDateValidator.setMax(new Date());
 		from.setValidators(nowDateValidator);
-		
+		from.setDetail(true);
+
 		setFields(id, session, desc, href, from, to); 
 		
 		addHandleErrorHandler(new HandleErrorHandler(){

@@ -3,11 +3,13 @@ package org.loran.gwt.client.charts;
 import java.util.Date;
 
 import org.moxieapps.gwt.highcharts.client.Axis;
+import org.moxieapps.gwt.highcharts.client.BaseChart;
 import org.moxieapps.gwt.highcharts.client.Chart;
 import org.moxieapps.gwt.highcharts.client.ChartSubtitle;
 import org.moxieapps.gwt.highcharts.client.ChartTitle;
 import org.moxieapps.gwt.highcharts.client.Point;
 import org.moxieapps.gwt.highcharts.client.Series;
+import org.moxieapps.gwt.highcharts.client.Series.Type;
 import org.moxieapps.gwt.highcharts.client.ToolTip;
 import org.moxieapps.gwt.highcharts.client.ToolTipData;
 import org.moxieapps.gwt.highcharts.client.ToolTipFormatter;
@@ -17,38 +19,36 @@ import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.smartgwt.client.data.Record;
 
-public class TimeChart extends Chart {
+public class TimeChart {
+	Chart chart;
 	String title="";
 	
-	Marker marker=new Marker();
 	
-	public TimeChart() {
-
-		marker.setEnabled(false);
-		
-		
+	public TimeChart() {		
+		chart=new Chart();
 		//setBackgroundColor("#2B2B2B");
 
-    		
-		setZoomType(Chart.ZoomType.X);
+		chart.setZoomType(BaseChart.ZoomType.X);
 		//setSpacingRight(20);
 		//setTitle(title);
 
-		setLinePlotOptions(new LinePlotOptions()
-				.setLineWidth(1)
-				.setMarker(new Marker().setEnabled(false)
-						               .setHoverState(new Marker().setEnabled(true)
-						            		                       .setRadius(5)
-						            		         )
-						  )
-				.setShadow(false)
+		chart.setLinePlotOptions(new LinePlotOptions()
+					.setLineWidth(1)
+					.setMarker(new Marker()
+					.setEnabled(false)
+					.setHoverState(new Marker()
+							.setEnabled(true)
+							.setRadius(5)
+							)
+					)
+				.setShadow(true)
 				.setHoverStateLineWidth(1)
 				);
 
-		getXAxis().setType(Axis.Type.DATE_TIME);
-		getXAxis().setEndOnTick(true);
+		chart.getXAxis().setType(Axis.Type.DATE_TIME);
+		chart.getXAxis().setEndOnTick(true);
 		
-		setToolTip(new ToolTip().setFormatter(new ToolTipFormatter() {
+		chart.setToolTip(new ToolTip().setFormatter(new ToolTipFormatter() {
 			public String format(ToolTipData toolTipData) {
 				return "<b>"
 						+ toolTipData.getSeriesName()
@@ -62,7 +62,7 @@ public class TimeChart extends Chart {
 	}
 	
 	public void clear(){		
-		removeAllSeries();
+		chart.removeAllSeries();
 	}
 
 	public String getTitle(){
@@ -71,7 +71,7 @@ public class TimeChart extends Chart {
 	
 	public void setTitle(String title){
 		this.title=title;
-		setTitle( new ChartTitle().setText(title)
+		chart.setTitle( new ChartTitle().setText(title)
 				, new ChartSubtitle().setText("(Click and drag in the plot area to zoom in)"));	
 	}
 
@@ -105,14 +105,13 @@ public class TimeChart extends Chart {
 //				type=Type.COLUMN;
 //		}
 //		
-			Series series = createSeries();
+			Series series = chart.createSeries();
 
 			series.setName(label+" ("+aggregation+")")
 				  .setOption("type", chartType)
 				  .setPlotOptions(new LinePlotOptions()  						
 				  .setColor(color)
 				  .setAllowPointSelect(true)	
-				  .setMarker(marker)
 				  );
 			
 			//  	.setPointStart(records[0].getAttributeAsLong("timestamp"))
@@ -123,14 +122,22 @@ public class TimeChart extends Chart {
 			for (Record r : records) {
 				series.addPoint(new Point(r.getAttributeAsLong("timestamp"),r.getAttributeAsDouble(aggreg)));
 			}
-			addSeries(series);
+			chart.addSeries(series);
 			
 
 		
-		getYAxis().setAxisTitleText(unit);
+			chart.getYAxis().setAxisTitleText(unit);
 	
 		}
 		
 		
 	}
+
+
+	
+	public Chart getChart() {
+		return chart;
+		
+	}
+
 }

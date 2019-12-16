@@ -10,27 +10,16 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
   <inherits name="com.google.gwt.i18n.I18N"/>
-    
-  <!-- Internationalization support. -->
-  <extend-property name="locale" values="en"/>
-  <extend-property name="locale" values="fr"/>
-  <extend-property name="locale" values="de"/>
-  <extend-property name="locale" values="es"/>
-  <extend-property name="locale" values="ru"/>
-  <extend-property name="locale" values="zh_CN"/>
-  <extend-property name="locale" values="ja"/>
-
-  <set-property-fallback name="locale" value="en"/>
-
-  <inherits name="org.moxieapps.gwt.highcharts.Highcharts"/>
 
   <!-- Other module inherits      -->
                                      
    <inherits name="com.smartgwt.SmartGwtNoScript"/>
    <inherits name="com.smartgwt.tools.SmartGwtTools"/>
 
-   <inherits name="com.smartclient.theme.simplicity.Simplicity"/>
+   <inherits name="com.smartclient.theme.stratus.Stratus"/>
     
+  <inherits name="org.moxieapps.gwt.highcharts.Highcharts"/>
+
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.loran.gwt.client.DynaTraceWebReporter'/>
 

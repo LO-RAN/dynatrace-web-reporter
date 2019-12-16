@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
-  <runtime name="Google App Engine (1.9.18)"/>
-  <installed facet="java" version="1.7"/>
+  <runtime name="App Engine Standard Runtime"/>
+  <fixed facet="wst.jsdt.web"/>
+  <installed facet="java" version="1.8"/>
+  <installed facet="jst.web" version="3.1"/>
+  <installed facet="wst.jsdt.web" version="1.0"/>
+  <installed facet="com.google.cloud.tools.eclipse.appengine.facets.standard" version="JRE8"/>
+  <installed facet="com.gwtplugins.gwt.facet" version="1.0"/>
 </faceted-project>
